@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 void main() {
+  runApp(MyTextInput());
   // runApp(MyApp());
-  runApp(MyButton());
+  // runApp(MyButton());
 }
 
 class MyButton extends StatelessWidget {
@@ -11,35 +12,11 @@ class MyButton extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          leading: Icon(Icons.home_filled),
-          title: Text('My App Bar'),
-          elevation: 10,
-        ),
         body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              print('Elevated Button Pressed');
-            },
-            onLongPress: () {
-              print('On Long Pressed');
-            },
-            style: ElevatedButton.styleFrom(
-                elevation: 8,
-                backgroundColor: Colors.redAccent,
-                minimumSize: Size(200, 50),
-                maximumSize: Size(200, 50),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(24)))),
-            child: Text(
-              'Elevated Button',
-            ),
+          child: Image.asset(
+            'images/superman.jpg',
+            fit: BoxFit.cover,
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
         ),
       ),
     );
@@ -52,45 +29,109 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter First App',
       debugShowCheckedModeBanner: true,
+      home: SafeArea(
+        child: Scaffold(
+          backgroundColor: Colors.black87,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                color: Colors.blue,
+                width: 120,
+                height: 120,
+              ),
+              Container(
+                color: Colors.amber,
+                width: 120,
+                height: 120,
+              ),
+              Container(
+                color: Colors.redAccent,
+                width: 120,
+                height: 120,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+// Row(
+// mainAxisAlignment: MainAxisAlignment.spaceAround,
+// children: [
+// Container(
+// color: Colors.blue,
+// width: 70,
+// height: 120,
+// ),
+// Container(
+// color: Colors.amber,
+// width: 70,
+// height: 120,
+// ),
+// Container(
+// color: Colors.redAccent,
+// width: 70,
+// height: 120,
+// )
+// ],
+// )
+}
+
+class MyTextInput extends StatelessWidget {
+  MyTextInput({super.key});
+
+  TextEditingController _controller = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
       home: Scaffold(
         body: Center(
-          child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.redAccent,
-              borderRadius: BorderRadius.all(Radius.circular(24)),
-              // border: Border.all(color: Colors.blueAccent, width: 5),
-              // shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 15,
-                  spreadRadius: 0.2,
-                  offset: Offset(2, 5),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: TextField(
+              controller: _controller,
+              enabled: true,
+              onTap: () {
+                print('Input field tapped!');
+              },
+              onChanged: (String text) {
+                print('$text');
+              },
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (String value) {
+                _controller.clear();
+                _controller.text = 'New Search';
+              },
+              obscureText: false,
+              decoration: InputDecoration(
+                // suffixIcon: Icon(Icons.add),
+                // prefixIcon: Icon(Icons.abc_rounded),
+                label: Text('UserName'),
+                hintText: 'Please give username',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.blue,
+                    width: 2,
+                  ),
                 ),
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 15,
-                  spreadRadius: 0.2,
-                  offset: Offset(5, 3),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.redAccent,
+                    width: 2,
+                  ),
                 ),
-              ],
-            ),
-            height: 200,
-            width: 300,
-            alignment: Alignment.center,
-            child: Text(
-              'First Container More Text and also Need More Text!',
-              // maxLines: 1,
-              // overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.normal,
-                wordSpacing: 5,
-                letterSpacing: 5,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.amber,
+                    width: 2,
+                  ),
+                ),
               ),
             ),
           ),
