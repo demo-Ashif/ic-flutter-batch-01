@@ -1,137 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ic_flutter_batch_first_app/product.dart';
 
 void main() {
-  // runApp(GestureWidget());
-  // runApp(ListWidget());
-  runApp(DynamicListWidget());
+  // runApp(GridViewWidget());
+  runApp(ProductGrid());
 }
 
-class GestureWidget extends StatelessWidget {
-  const GestureWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Column(
-          children: [
-            SizedBox(height: 50),
-            GestureDetector(
-              onTap: () {
-                print('On Tap Happened!');
-              },
-              onDoubleTap: () {
-                print('On DoubleTap Happened!');
-              },
-              onLongPress: () {
-                print('On LongPressed Happened!');
-              },
-              child: Container(
-                height: 150,
-                width: 150,
-                color: Colors.redAccent,
-                child: Text('My Container'),
-              ),
-            ),
-            SizedBox(height: 50),
-            InkWell(
-              onLongPress: () {
-                print('On LongPressed Happened!');
-              },
-              splashColor: Colors.amber,
-              radius: 50,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text('Click Me!'),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// class ListWidget extends StatelessWidget {
-//   ListWidget({super.key});
-//
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     List<String> sampleNames = [
-//       'Alice', 'Bob', 'Charlie', 'Diana', 'Evan',
-//       'Fiona', 'George', 'Hannah', 'Ian', 'Jenna',
-//       'Kyle', 'Luna', 'Mike', 'Nora', 'Oliver'
-//     ];
-//
-//     List<Student> students = List.generate(sampleNames.length, (index) {
-//       return Student(name: sampleNames[index], roll: index + 1);
-//     });
-//
-//
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: true,
-//       home: SafeArea(
-//         child: Scaffold(
-//           body: ListView(
-//             children: [
-//               ListTile(
-//                 onTap: () {
-//                   print('On tap student!');
-//                 },
-//                 leading: Icon(Icons.abc),
-//                 title: Text('Student Name: ${studentNames[0]}'),
-//                 subtitle: Text('Student Roll: 42'),
-//                 style: ListTileStyle.list,
-//               ),
-//               ListTile(
-//                 onTap: () {
-//                   print('On tap student!');
-//                 },
-//                 leading: Icon(Icons.abc),
-//                 title: Text('Student Name: ${studentNames[1]}'),
-//                 subtitle: Text('Student Roll: 43'),
-//                 style: ListTileStyle.list,
-//               ),
-//               ListTile(
-//                 onTap: () {
-//                   print('On tap student!');
-//                 },
-//                 leading: Icon(Icons.abc),
-//                 title: Text('Student Name: ${studentNames[2]}'),
-//                 subtitle: Text('Student Roll: 32'),
-//                 style: ListTileStyle.list,
-//               ),
-//               ListTile(
-//                 onTap: () {
-//                   print('On tap student!');
-//                 },
-//                 leading: Icon(Icons.abc),
-//                 title: Text('Student Name: ${studentNames[3]}'),
-//                 subtitle: Text('Student Roll: 67'),
-//                 style: ListTileStyle.list,
-//               ),
-//               ListTile(
-//                 onTap: () {
-//                   print('On tap student!');
-//                 },
-//                 leading: Icon(Icons.abc),
-//                 title: Text('Student Name: ${studentNames[4]}'),
-//                 subtitle: Text('Student Roll: 72'),
-//                 style: ListTileStyle.list,
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-class DynamicListWidget extends StatelessWidget {
-  DynamicListWidget({super.key});
+class GridViewWidget extends StatelessWidget {
+  GridViewWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -153,39 +29,135 @@ class DynamicListWidget extends StatelessWidget {
       'Oliver'
     ];
 
-    List<Student> students = List.generate(sampleNames.length, (index) {
-      return Student(name: sampleNames[index], roll: index + 1);
-    });
-
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       home: SafeArea(
         child: Scaffold(
-          body: ListView.builder(
-              itemCount: students.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                          'Student: ${students[index].name} & Roll: ${students[index].roll}'),
-                    ));
-                  },
-                  leading: Icon(Icons.abc),
-                  title: Text('Student Name: ${students[index].name}'),
-                  subtitle: Text('Student Roll: ${students[index].roll}'),
-                  style: ListTileStyle.list,
-                );
-              }),
+          body: GridView.builder(
+            // scrollDirection: Axis.horizontal,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: sampleNames.length,
+            itemBuilder: (context, index) {
+              return Container(
+                color: Colors.redAccent,
+                child: Center(
+                  child: Text(
+                    sampleNames[index],
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
   }
 }
 
-class Student {
-  String name;
-  int roll;
+class ProductGrid extends StatelessWidget {
+  const ProductGrid({super.key});
 
-  Student({required this.name, required this.roll});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
+      home: Scaffold(
+        backgroundColor: Colors.grey.withOpacity(0.8),
+        appBar: AppBar(
+          title: Text('Shopper'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: GridView.builder(
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              '\$ ${products[index].price.toStringAsFixed(0)}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Image.network(
+                        '${products[index].image}',
+                        height: 70,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        child: Text(
+                          '${products[index].title}',
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '${products[index].category}',
+                          maxLines: 1,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic, fontSize: 13),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 3,
+                        ),
+                        child: Text(
+                          '${products[index].description}',
+                          maxLines: 2,
+                          textAlign: TextAlign.start,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ),
+      ),
+    );
+  }
 }
