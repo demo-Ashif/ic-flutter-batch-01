@@ -1,101 +1,95 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyThemeApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyThemeApp extends StatelessWidget {
+  const MyThemeApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Themed App Demo',
       theme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.light,
-        primaryColor: Colors.blue,
-        hintColor: Colors.cyan,
-
-        // Define the default font family.
-        fontFamily: 'Georgia',
-
-        // Define the default TextTheme. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
-        textTheme: TextTheme(
-          displayLarge: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        ),
-
-        // Define the default InputDecorationTheme. Use this to specify the default
-        // input decoration for TextField widgets.
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(),
-          labelStyle: TextStyle(color: Colors.blue),
-        ),
-      ),
+          useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.black,
+            ),
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.blueAccent,
+            elevation: 5,
+            titleTextStyle: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.amberAccent,
+          )),
       darkTheme: ThemeData(
-        // Define the default brightness and colors.
-        brightness: Brightness.dark,
-        primaryColor: Colors.lightBlue[800],
-        hintColor: Colors.cyan[600],
-
-        // Define the default font family.
-        fontFamily: 'Georgia',
-
-        // Define the default TextTheme.
-        textTheme: TextTheme(
-          displayLarge: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          bodyMedium: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
-        ),
-
-        // Define the default InputDecorationTheme.
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(),
-          labelStyle: TextStyle(color: Colors.blueAccent),
-        ),
+        useMaterial3: true,
+        scaffoldBackgroundColor: Colors.black12,
       ),
-      home: MyHomePage(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.light,
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Home'),
+      ),
       body: Center(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Hello, Themes!',
-                style: Theme.of(context).textTheme.titleLarge,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Click Me'),
+            ),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Click Me 2'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
               ),
-              SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'First TextField',
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Second TextField',
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                child: Text('Click Me'),
-              ),
-            ],
-          ),
+              onPressed: () {},
+              child: Text('Click Me 3'),
+            ),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage2(),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+      ),
     );
+  }
+}
+
+class HomePage2 extends StatelessWidget {
+  const HomePage2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold();
   }
 }
