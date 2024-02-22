@@ -9,8 +9,12 @@ class DiceRoller extends StatefulWidget {
   }
 }
 
+/// Hints
+/// 1. Dart Random Number generate
+/// 2. String interpolation of that number
+
 class _DiceRollerState extends State<DiceRoller> {
-  var activeDiceImage = 'assets/images/dice-2.png';
+  var activeDiceImage = 'assets/images/dice-1.png';
 
   void rollDice() {
     setState(() {
