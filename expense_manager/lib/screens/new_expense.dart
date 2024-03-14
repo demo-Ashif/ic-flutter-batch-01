@@ -87,7 +87,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
       child: Column(
         children: [
           //Input for title
@@ -96,7 +96,10 @@ class _NewExpenseState extends State<NewExpense> {
             maxLength: 50,
             decoration: InputDecoration(label: Text('Title')),
           ),
+          const SizedBox(width: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 child: TextField(
@@ -120,7 +123,7 @@ class _NewExpenseState extends State<NewExpense> {
               )
             ],
           ),
-
+          const SizedBox(height: 16),
           Row(
             children: [
               //Category DropDown
@@ -146,6 +149,7 @@ class _NewExpenseState extends State<NewExpense> {
                   });
                 },
               ),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);

@@ -31,6 +31,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   void _openAddExpenseModal() {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(
         onAddExpense: _addExpense,
@@ -42,6 +43,32 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     setState(() {
       _registeredExpenses.add(expense);
     });
+  }
+
+  void _removeExpense(Expense expense) {
+    final expenseIndex = _registeredExpenses.indexOf(expense);
+
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+
+    //show undo option and insert if undo clicked
+    //Snackbar
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: Duration(seconds: 3),
+        content: Text('Expense Deleted'),
+        action: SnackBarAction(
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -62,6 +89,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           Expanded(
             child: ExpenseList(
               expenses: _registeredExpenses,
+              onRemoveExpense: _removeExpense,
             ),
           )
         ],
