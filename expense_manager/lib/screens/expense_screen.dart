@@ -1,4 +1,5 @@
 import 'package:expense_manager/enums/category_enums.dart';
+import 'package:expense_manager/widgets/chart.dart';
 import 'package:flutter/material.dart';
 
 import '../models/expense.dart';
@@ -85,7 +86,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       ),
       body: Column(
         children: [
-          Text('Expense Chart'),
+          Chart(expenses: _registeredExpenses),
           Expanded(
             child: ExpenseList(
               expenses: _registeredExpenses,
