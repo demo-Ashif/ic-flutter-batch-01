@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:expense_manager/enums/category_enums.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../models/expense.dart';
@@ -36,19 +39,13 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
-  //saving new expense
-  void _submitExpenseData() {
-    final enteredAmount =
-        double.tryParse(_amountController.text); // 1.12 => 1.12, 'Hello' =>null
-    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+  //show dialog
 
-    //check all input
-    if (_titleController.text.trim().isEmpty ||
-        amountIsInvalid ||
-        _selectedDate == null) {
-      showDialog(
+  void _showDialog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
         context: context,
-        builder: (ctx) => AlertDialog(
+        builder: (ctx) => CupertinoAlertDialog(
           title: Text('Invalid Input'),
           content: Text(
               'Pleas make sure you have entered valid title, amount, category and date'),
@@ -62,6 +59,37 @@ class _NewExpenseState extends State<NewExpense> {
           ],
         ),
       );
+    } else {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text('Invalid Input'),
+          content: Text(
+              'Please make sure you have entered valid title, amount, category and date'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Okay'),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  //saving new expense
+  void _submitExpenseData() {
+    final enteredAmount =
+        double.tryParse(_amountController.text); // 1.12 => 1.12, 'Hello' =>null
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    //check all input
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      _showDialog();
 
       return;
     }
@@ -93,13 +121,14 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: LayoutBuilder(builder: (ctx, constraints) {
-        final maxWidth = constraints.maxWidth;
-
-        return SingleChildScrollView(
+    return LayoutBuilder(builder: (ctx, constraints) {
+      final maxWidth = constraints.maxWidth;
+      final keyboardSpace = MediaQuery.viewInsetsOf(context).bottom;
+      return SizedBox(
+        height: double.infinity,
+        child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+            padding: EdgeInsets.fromLTRB(16, 48, 16, keyboardSpace + 16),
             child: Column(
               children: [
                 maxWidth > 600
@@ -107,15 +136,19 @@ class _NewExpenseState extends State<NewExpense> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
-                              child: TitleWidget(
-                                  titleController: _titleController)),
+                            child: TitleWidget(
+                              titleController: _titleController,
+                            ),
+                          ),
                           const SizedBox(width: 16),
                           Expanded(
                               child: AmountWidget(
                                   amountController: _amountController))
                         ],
                       )
-                    : TitleWidget(titleController: _titleController),
+                    : TitleWidget(
+                        titleController: _titleController,
+                      ),
                 const SizedBox(height: 16),
                 maxWidth > 600
                     ? Row(
@@ -172,9 +205,9 @@ class _NewExpenseState extends State<NewExpense> {
               ],
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }
 
@@ -295,6 +328,7 @@ class CategoryDropdownWidget extends StatelessWidget {
         if (value == null) {
           return;
         }
+
         onExpenseCategoryChanged(value);
       },
     );

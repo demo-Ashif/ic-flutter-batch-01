@@ -1,6 +1,7 @@
 import 'package:expense_manager/enums/category_enums.dart';
 import 'package:expense_manager/widgets/chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../models/expense.dart';
 import '../widgets/expense_list.dart';
@@ -33,6 +34,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   void _openAddExpenseModal() {
     showModalBottomSheet(
       isScrollControlled: true,
+      useSafeArea: true,
       context: context,
       builder: (ctx) => NewExpense(
         onAddExpense: _addExpense,
@@ -77,6 +79,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         title: Text('Expense Manager'),
         actions: [
           IconButton(
