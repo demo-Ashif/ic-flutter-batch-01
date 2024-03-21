@@ -74,6 +74,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
         title: Text('Expense Manager'),
@@ -84,17 +85,30 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Chart(expenses: _registeredExpenses),
-          Expanded(
-            child: ExpenseList(
-              expenses: _registeredExpenses,
-              onRemoveExpense: _removeExpense,
+      body: width < 600
+          ? Column(
+              children: [
+                Chart(expenses: _registeredExpenses),
+                Expanded(
+                  child: ExpenseList(
+                    expenses: _registeredExpenses,
+                    onRemoveExpense: _removeExpense,
+                  ),
+                )
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Chart(expenses: _registeredExpenses)),
+                Expanded(
+                  child: ExpenseList(
+                    expenses: _registeredExpenses,
+                    onRemoveExpense: _removeExpense,
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

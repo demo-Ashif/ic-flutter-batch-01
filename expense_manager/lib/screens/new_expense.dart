@@ -77,6 +77,13 @@ class _NewExpenseState extends State<NewExpense> {
     Navigator.pop(context);
   }
 
+  //reset dropdown
+  void _resetCategoryDropdown(value) {
+    setState(() {
+      _selectedCategory = value;
+    });
+  }
+
   @override
   void dispose() {
     _titleController.dispose();
@@ -86,84 +93,210 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
-      child: Column(
-        children: [
-          //Input for title
-          TextField(
-            controller: _titleController,
-            maxLength: 50,
-            decoration: InputDecoration(label: Text('Title')),
-          ),
-          const SizedBox(width: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    prefixText: '\$',
-                    label: Text('Amount'),
-                  ),
-                ),
-              ),
-              SizedBox(width: 16),
-              Text(
-                _selectedDate == null
-                    ? 'No Date Selected'
-                    : formatter.format(_selectedDate!),
-              ),
-              IconButton(
-                onPressed: _presentDatePicker,
-                icon: Icon(Icons.calendar_month),
-              )
-            ],
-          ),
-          const SizedBox(height: 16),
-          Row(
-            children: [
-              //Category DropDown
-              DropdownButton(
-                value: _selectedCategory,
-                items: ExpenseCategory.values
-                    .map(
-                      (category) => DropdownMenuItem(
-                        value: category,
-                        child: Text(
-                          category.name.toUpperCase(),
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (value == null) {
-                    return;
-                  }
+    return SafeArea(
+      child: LayoutBuilder(builder: (ctx, constraints) {
+        final maxWidth = constraints.maxWidth;
 
-                  setState(() {
-                    _selectedCategory = value;
-                  });
-                },
-              ),
-              const Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel'),
-              ),
-              ElevatedButton(
-                onPressed: _submitExpenseData,
-                child: Text('Save Expense'),
-              )
-            ],
-          )
-        ],
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 48, 16, 16),
+            child: Column(
+              children: [
+                maxWidth > 600
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                              child: TitleWidget(
+                                  titleController: _titleController)),
+                          const SizedBox(width: 16),
+                          Expanded(
+                              child: AmountWidget(
+                                  amountController: _amountController))
+                        ],
+                      )
+                    : TitleWidget(titleController: _titleController),
+                const SizedBox(height: 16),
+                maxWidth > 600
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CategoryDropdownWidget(
+                            selectedCategory: _selectedCategory,
+                            onExpenseCategoryChanged: _resetCategoryDropdown,
+                          ),
+                          SizedBox(width: 16),
+                          Text(
+                            _selectedDate == null
+                                ? 'No Date Selected'
+                                : formatter.format(_selectedDate!),
+                          ),
+                          DatePickWidget(onDateSelected: _presentDatePicker),
+                          CancelButtonWidget(),
+                          SaveButtonWidget(onPressed: _submitExpenseData)
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: AmountWidget(
+                                amountController: _amountController),
+                          ),
+                          SizedBox(width: 16),
+                          Text(
+                            _selectedDate == null
+                                ? 'No Date Selected'
+                                : formatter.format(_selectedDate!),
+                          ),
+                          DatePickWidget(onDateSelected: _presentDatePicker)
+                        ],
+                      ),
+                const SizedBox(height: 16),
+                maxWidth > 600
+                    ? SizedBox.shrink()
+                    : Row(
+                        children: [
+                          //Category DropDown
+                          CategoryDropdownWidget(
+                            selectedCategory: _selectedCategory,
+                            onExpenseCategoryChanged: _resetCategoryDropdown,
+                          ),
+                          const Spacer(),
+                          CancelButtonWidget(),
+                          SaveButtonWidget(onPressed: _submitExpenseData)
+                        ],
+                      )
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class SaveButtonWidget extends StatelessWidget {
+  final Function() onPressed;
+
+  const SaveButtonWidget({
+    super.key,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text('Save Expense'),
+    );
+  }
+}
+
+class CancelButtonWidget extends StatelessWidget {
+  const CancelButtonWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      child: Text('Cancel'),
+    );
+  }
+}
+
+class AmountWidget extends StatelessWidget {
+  const AmountWidget({
+    super.key,
+    required TextEditingController amountController,
+  }) : _amountController = amountController;
+
+  final TextEditingController _amountController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _amountController,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        prefixText: '\$',
+        label: Text('Amount'),
       ),
+    );
+  }
+}
+
+class TitleWidget extends StatelessWidget {
+  const TitleWidget({
+    super.key,
+    required TextEditingController titleController,
+  }) : _titleController = titleController;
+
+  final TextEditingController _titleController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _titleController,
+      maxLength: 50,
+      decoration: InputDecoration(label: Text('Title')),
+    );
+  }
+}
+
+class DatePickWidget extends StatelessWidget {
+  const DatePickWidget({
+    super.key,
+    required this.onDateSelected,
+  });
+
+  final Function() onDateSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onDateSelected,
+      icon: Icon(Icons.calendar_month),
+    );
+  }
+}
+
+class CategoryDropdownWidget extends StatelessWidget {
+  final ExpenseCategory selectedCategory;
+  final Function(ExpenseCategory) onExpenseCategoryChanged;
+
+  const CategoryDropdownWidget({
+    super.key,
+    this.selectedCategory = ExpenseCategory.leisure,
+    required this.onExpenseCategoryChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      value: selectedCategory,
+      items: ExpenseCategory.values
+          .map(
+            (category) => DropdownMenuItem(
+              value: category,
+              child: Text(
+                category.name.toUpperCase(),
+              ),
+            ),
+          )
+          .toList(),
+      onChanged: (value) {
+        if (value == null) {
+          return;
+        }
+        onExpenseCategoryChanged(value);
+      },
     );
   }
 }
