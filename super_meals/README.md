@@ -1,4 +1,4 @@
-# super_meals
+# Super Meals App
 
 A new Flutter project.
 
