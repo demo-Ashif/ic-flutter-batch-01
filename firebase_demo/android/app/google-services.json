@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1064766725151",
+    "project_id": "ic-firebase-batch-01",
+    "storage_bucket": "ic-firebase-batch-01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064766725151:android:b1673a8a0e3ed86984c92a",
+        "android_client_info": {
+          "package_name": "com.example.firebase_demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOolSL1YeucJlIvY5fqH8-50Lom9TMVY4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
