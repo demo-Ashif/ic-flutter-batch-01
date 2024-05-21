@@ -5,6 +5,7 @@ import 'package:firebase_demo/book_list_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
+import 'profile_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,16 +14,20 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const BookApp());
+  runApp(const MyApp());
 }
 
-class BookApp extends StatelessWidget {
-  const BookApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: BookListScreen(),
+    return MaterialApp(
+      title: 'Flutter Firebase Storage',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: ProfilePage(),
     );
   }
 }
