@@ -32,7 +32,7 @@ class ApiService {
   static Map<String, String> _buildHeaders() {
     return {
       'Content-Type': contentTypeJson,
-      'Authorization': '',
+      'Authorization': 'Bearer ',
     };
   }
 
