@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:assignment_manager/presentation/controllers/auth_controller.dart';
+
 import '../models/response_model.dart';
 import 'package:http/http.dart' as http;
-
 
 //wrapper class
 class ApiService {
@@ -19,7 +20,8 @@ class ApiService {
   }
 
   static Future<ResponseModel> postRequest(
-      String url, Map<String, dynamic> body) async {
+      String url, Map<String, dynamic> body,
+      {bool fromSignIn = false}) async {
     return _makeRequest(
       () => http.post(
         Uri.parse(url),
@@ -32,7 +34,7 @@ class ApiService {
   static Map<String, String> _buildHeaders() {
     return {
       'Content-Type': contentTypeJson,
-      'Authorization': 'Bearer ',
+      'Authorization': "Bearer ${AuthController.accessToken ?? ''}",
     };
   }
 
@@ -55,7 +57,7 @@ class ApiService {
   }
 
   static ResponseModel _handleResponse(http.Response response) {
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final decodedResponse = jsonDecode(response.body);
 
       return ResponseModel(
@@ -63,6 +65,12 @@ class ApiService {
         statusCode: response.statusCode,
         responseBody: decodedResponse,
       );
+    } else if (response.statusCode == 401) {
+      return ResponseModel(
+          isSuccess: false,
+          statusCode: response.statusCode,
+          responseBody: '',
+          errorMessage: 'You are unauthenticated');
     } else {
       return ResponseModel(
         isSuccess: false,

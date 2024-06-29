@@ -31,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  Future<void> _signIn() async {
+  Future<void> _signUp() async {
     final result = await _signUpController.signUp(
       _fullNameController.text.trim(),
       _emailController.text.trim(),
@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    _signIn();
+                                    _signUp();
                                   }
                                 },
                                 child: const Text('Sign Up'),
