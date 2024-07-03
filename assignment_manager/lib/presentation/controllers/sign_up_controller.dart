@@ -1,3 +1,5 @@
+import 'package:assignment_manager/data/models/user_model.dart';
+import 'package:assignment_manager/presentation/controllers/auth_controller.dart';
 import 'package:get/get.dart';
 
 import '../../data/models/response_model.dart';
@@ -11,6 +13,7 @@ class SignUpController extends GetxController {
   bool get inProgress => _inProgress;
 
   String get errorMessage => _errorMessage ?? 'SignUp failed! Try again';
+
 
   Future<bool> signUp(String name, String email, String password) async {
     _inProgress = true;
@@ -40,4 +43,5 @@ class SignUpController extends GetxController {
       return false;
     }
   }
+
 }

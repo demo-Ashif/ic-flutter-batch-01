@@ -12,6 +12,7 @@ class NewTaskController extends GetxController {
 
   String get errorMessage => _errorMessage ?? 'SignUp failed! Try again';
 
+
   Future<bool> addNewTask(String title, String description) async {
     _inProgress = true;
     update();
