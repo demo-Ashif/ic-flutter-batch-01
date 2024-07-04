@@ -19,9 +19,9 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
 
   final List<Widget> _screens = [
     const AssignmentScreen(),
-    const CompletedScreen(),
+    CompletedScreen(),
     const CancelledScreen(),
-    const OverviewScreen(),
+    OverviewScreen(),
   ];
 
   @override

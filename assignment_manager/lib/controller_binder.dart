@@ -4,6 +4,9 @@ import 'package:assignment_manager/presentation/controllers/sign_in_controller.d
 import 'package:assignment_manager/presentation/controllers/sign_up_controller.dart';
 import 'package:get/get.dart';
 
+import 'presentation/controllers/completed_task_controller.dart';
+import 'presentation/controllers/overview_task_controller.dart';
+
 class ControllerBinder extends Bindings {
   @override
   void dependencies() {
@@ -11,5 +14,7 @@ class ControllerBinder extends Bindings {
     Get.put(SignInController());
     Get.lazyPut(() => NewTaskController());
     Get.lazyPut(() => ProfileController());
+    Get.lazyPut(() => CompletedTaskController());
+    Get.lazyPut(() => OverviewTaskController());
   }
 }

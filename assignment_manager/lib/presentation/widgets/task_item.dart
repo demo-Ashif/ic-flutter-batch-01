@@ -1,7 +1,10 @@
+import 'package:assignment_manager/data/models/task_item.dart';
 import 'package:flutter/material.dart';
 
-class TaskItem extends StatelessWidget {
-  const TaskItem({super.key});
+class TaskItemWidget extends StatelessWidget {
+  const TaskItemWidget({super.key, this.taskItem});
+
+  final TaskItem? taskItem;
 
   @override
   Widget build(BuildContext context) {
@@ -13,18 +16,18 @@ class TaskItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Task Title',
-              style: TextStyle(
+             Text(
+              '${taskItem?.title}',
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const Text(
-              'Task Subtitle/Caption',
+             Text(
+              '${taskItem?.description}',
             ),
             Row(
               children: [
-                const Chip(label: Text('New')),
+                Chip(label: Text('${taskItem?.status.toUpperCase()}')),
                 const Spacer(),
                 IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
                 IconButton(onPressed: (){}, icon: const Icon(Icons.delete)),

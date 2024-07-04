@@ -21,7 +21,7 @@ class AssignmentScreen extends StatelessWidget {
             Expanded(
               child: ListView.builder(
                 itemCount: 10,
-                itemBuilder: (context, index) => const TaskItem(),
+                itemBuilder: (context, index) => const TaskItemWidget(),
               ),
             ),
           ],
