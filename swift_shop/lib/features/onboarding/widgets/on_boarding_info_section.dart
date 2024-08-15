@@ -6,6 +6,7 @@ import '../../../core/res/media.dart';
 import '../../../core/res/styles/colors.dart';
 import '../../../core/res/styles/text.dart';
 import '../../../core/utils/core_utils.dart';
+import '../../auth/views/login_screen.dart';
 import '../../shared/widgets/rounded_button.dart';
 
 class OnBoardingInfoSection extends StatelessWidget {
@@ -78,7 +79,7 @@ class OnBoardingInfoSection extends StatelessWidget {
               text: 'Get Started',
               onPressed: () {
                 // sl<CacheHelper>().cacheFirstTimer();
-                // context.go(LoginScreen.path);
+                context.pushReplacement(LoginScreen.path);
               },
             ),
           ],
