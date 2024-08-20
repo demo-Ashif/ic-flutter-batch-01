@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:swift_shop/core/router/app_router.dart';
 
 import 'core/res/styles/colors.dart';
 
 void main() {
-  runApp(const SwiftShopApp());
+  runApp(const ProviderScope(child: SwiftShopApp()));
 }
 
 class SwiftShopApp extends StatelessWidget {

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/features/shared/widgets/rounded_button.dart';
 
 import '../../../core/res/styles/text.dart';
+import '../../../core/utils/core_utils.dart';
 import '../../shared/widgets/vertical_label_field.dart';
 
 class LoginForm extends StatefulWidget {
@@ -55,8 +57,9 @@ class _LoginFormState extends State<LoginForm> {
                   controller: passwordController,
                   keyboardType: TextInputType.visiblePassword,
                   suffixIcon: GestureDetector(
-                    onTap: (){
-                      obscurePasswordNotifier.value =  !obscurePasswordNotifier.value;
+                    onTap: () {
+                      obscurePasswordNotifier.value =
+                          !obscurePasswordNotifier.value;
                     },
                     child: Icon(
                       value
@@ -83,7 +86,11 @@ class _LoginFormState extends State<LoginForm> {
                 )),
           ),
           const Gap(40),
-          RoundedButton(onPressed: (){}, text: 'Sign In'),
+          RoundedButton(
+              onPressed: () {
+                context.go('/', extra: 'home');
+              },
+              text: 'Sign In'),
         ],
       ),
     );
