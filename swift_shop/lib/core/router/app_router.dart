@@ -6,6 +6,7 @@ import 'package:swift_shop/features/dashboard/presentation/screens/dashboard_scr
 import 'package:swift_shop/features/explore/presentation/screens/explore_screen.dart';
 import 'package:swift_shop/features/home/presentation/screens/home_screen.dart';
 import 'package:swift_shop/features/onboarding/views/onboarding_screen.dart';
+import 'package:swift_shop/features/products/presentation/screens/product_detail_screen.dart';
 import 'package:swift_shop/features/profile/presentation/screens/profile_screen.dart';
 import 'package:swift_shop/features/wishlist/presentation/screens/wishlist_screen.dart';
 
@@ -58,6 +59,14 @@ final router = GoRouter(
             path: ProfileScreen.path,
             builder: (context, state) => const ProfileScreen(),
           ),
-        ])
+        ]),
+    GoRoute(
+        path: '/products/:productId',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) {
+          return ProductDetailScreen(
+            productId: state.pathParameters['productId'] as String,
+          );
+        }),
   ],
 );

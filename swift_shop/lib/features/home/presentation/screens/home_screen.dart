@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swift_shop/features/home/presentation/widgets/search_section.dart';
 
+import '../../../products/presentation/screens/popular_product_screen.dart';
 import '../widgets/categories_section.dart';
 import '../widgets/home_app_bar.dart';
 
@@ -29,6 +30,7 @@ class HomeScreen extends StatelessWidget {
                   //promo banner
                   CategoriesSection(),
                   //popular products
+                  PopularProductScreen()
                   //new arrivals
                 ],
               ),
