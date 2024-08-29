@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/features/shared/widgets/rounded_button.dart';
 
-import '../../../core/res/styles/text.dart';
-import '../../../core/utils/core_utils.dart';
-import '../../shared/widgets/vertical_label_field.dart';
+import '../../../../core/res/styles/text.dart';
+import '../../../shared/widgets/vertical_label_field.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

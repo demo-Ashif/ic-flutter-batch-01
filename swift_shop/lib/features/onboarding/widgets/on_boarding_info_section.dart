@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 
@@ -6,7 +7,7 @@ import '../../../core/res/media.dart';
 import '../../../core/res/styles/colors.dart';
 import '../../../core/res/styles/text.dart';
 import '../../../core/utils/core_utils.dart';
-import '../../auth/views/login_screen.dart';
+import '../../auth/presentation/screens/login_screen.dart';
 import '../../shared/widgets/rounded_button.dart';
 
 class OnBoardingInfoSection extends StatelessWidget {
@@ -79,7 +80,8 @@ class OnBoardingInfoSection extends StatelessWidget {
               text: 'Get Started',
               onPressed: () {
                 // sl<CacheHelper>().cacheFirstTimer();
-                context.pushReplacement(LoginScreen.path);
+                // context.pushReplacement(LoginScreen.path);
+                Get.off(() => const LoginScreen());
               },
             ),
           ],

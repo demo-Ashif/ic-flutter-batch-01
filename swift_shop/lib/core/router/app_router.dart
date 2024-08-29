@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:swift_shop/features/auth/views/login_screen.dart';
-import 'package:swift_shop/features/auth/views/register_screen.dart';
+import 'package:swift_shop/features/auth/presentation/screens/login_screen.dart';
+import 'package:swift_shop/features/auth/presentation/screens/register_screen.dart';
 import 'package:swift_shop/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:swift_shop/features/explore/presentation/screens/explore_screen.dart';
 import 'package:swift_shop/features/home/presentation/screens/home_screen.dart';

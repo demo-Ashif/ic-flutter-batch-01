@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
-import 'package:swift_shop/features/auth/widgets/registration_form.dart';
 
-import '../../../core/res/styles/colors.dart';
-import '../../../core/res/styles/text.dart';
-import '../../shared/widgets/app_bar_bottom.dart';
+import '../../../../core/res/styles/colors.dart';
+import '../../../../core/res/styles/text.dart';
+import '../../../shared/widgets/app_bar_bottom.dart';
+import '../widgets/registration_form.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {

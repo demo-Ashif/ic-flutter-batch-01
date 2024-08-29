@@ -1,14 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/core/res/styles/colors.dart';
-import 'package:swift_shop/features/auth/widgets/login_form.dart';
 import 'package:swift_shop/features/shared/widgets/app_bar_bottom.dart';
 
-import '../../../core/res/styles/text.dart';
+import '../../../../core/res/styles/text.dart';
+import '../widgets/login_form.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -52,9 +52,10 @@ class LoginScreen extends StatelessWidget {
               children: [
                 TextSpan(
                   text: 'Create Account',
-                  style: TextStyle(color: Colours.lightThemePrimaryColour),
+                  style: const TextStyle(color: Colours.lightThemePrimaryColour),
                   recognizer: TapGestureRecognizer()..onTap=(){
-                    context.go(RegisterScreen.path);
+                    // context.go(RegisterScreen.path);
+                    Get.to(()=>const RegisterScreen());
                   }
                 ),
               ]

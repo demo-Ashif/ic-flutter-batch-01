@@ -1,10 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
 import 'package:swift_shop/core/router/app_router.dart';
 
+import 'controller_binder.dart';
+import 'core/di/injection_container.dart';
 import 'core/res/styles/colors.dart';
+import 'features/onboarding/views/onboarding_screen.dart';
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await init();
   runApp(const ProviderScope(child: SwiftShopApp()));
 }
 
@@ -25,10 +33,12 @@ class SwiftShopApp extends StatelessWidget {
       useMaterial3: true,
     );
 
-    return MaterialApp.router(
-      routerConfig: router,
+    return GetMaterialApp(
+      // routerConfig: router,
       title: 'Swift Shop',
       theme: theme,
+      home: const OnboardingScreen(),
+      initialBinding: ControllerBinder(),
       darkTheme: theme.copyWith(
         scaffoldBackgroundColor: Colours.darkThemeBGDark,
         appBarTheme: const AppBarTheme(
