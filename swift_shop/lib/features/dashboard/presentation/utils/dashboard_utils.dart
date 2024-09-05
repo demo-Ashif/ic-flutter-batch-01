@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:iconly/iconly.dart';
 import 'package:swift_shop/features/explore/presentation/screens/explore_screen.dart';
 import 'package:swift_shop/features/home/presentation/screens/home_screen.dart';
@@ -16,13 +15,13 @@ abstract class DashboardUtils {
     (IconlyBroken.profile, IconlyBold.profile),
   ];
 
-  static int activeIndex(GoRouterState state) {
-    return switch (state.fullPath) {
-      HomeScreen.path => 0,
-      ExploreScreen.path => 1,
-      WishlistScreen.path => 2,
-      ProfileScreen.path => 3,
-      _ => 0,
-    };
-  }
+  // static int activeIndex(GoRouterState state) {
+  //   return switch (state.fullPath) {
+  //     HomeScreen.path => 0,
+  //     ExploreScreen.path => 1,
+  //     WishlistScreen.path => 2,
+  //     ProfileScreen.path => 3,
+  //     _ => 0,
+  //   };
+  // }
 }

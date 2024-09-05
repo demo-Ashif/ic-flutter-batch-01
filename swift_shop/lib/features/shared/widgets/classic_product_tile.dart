@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
-import 'package:go_router/go_router.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/features/products/domain/product_model.dart';
@@ -19,7 +18,7 @@ class ClassicProductTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => context.push('/products/${product.id}'),
+      // onTap: () => context.push('/products/${product.id}'),
       child: Container(
         width: (context.width / 2) - 30,
         padding: const EdgeInsets.all(5),

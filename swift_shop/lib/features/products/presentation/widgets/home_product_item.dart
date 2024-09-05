@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/features/products/domain/product_model.dart';
@@ -22,7 +22,8 @@ class HomeProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push('/products/${product.id}'),
+      // onTap: () => context.push('/products/${product.id}'),
+      onTap: () => Get.toNamed('/products/${product.id}'),
       child: Container(
         height: 228,
         width: 196,

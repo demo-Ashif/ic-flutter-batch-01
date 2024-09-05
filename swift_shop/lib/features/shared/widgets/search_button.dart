@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 
 import '../../products/presentation/screens/search_view.dart';
@@ -14,7 +14,7 @@ class SearchButton extends StatelessWidget {
     return Padding(
       padding: padding ?? EdgeInsets.zero,
       child: IconButton(
-        onPressed: () => context.push(SearchView.path),
+        onPressed: () => Get.toNamed(SearchView.path),
         icon: const Icon(IconlyBroken.search),
       ),
     );

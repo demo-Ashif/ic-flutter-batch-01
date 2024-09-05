@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 
-import '../../../../core/app/cache/cache.dart';
 import '../../../../core/app/cache/cache_helper.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/errors/error_reponse.dart';
@@ -101,7 +100,6 @@ class AuthRemoteDataSrcImpl implements AuthRemoteDataSrc {
   }) async {
     try {
       final uri = Uri.parse('${NetworkConstants.baseUrl}$LOGIN_ENDPOINT');
-      // final uri = Uri.parse('http://10.0.2.2:3000/api/v1/login');
 
       final response = await _client.post(
         uri,
@@ -116,7 +114,7 @@ class AuthRemoteDataSrcImpl implements AuthRemoteDataSrc {
           statusCode: response.statusCode,
         );
       }
-      await sl<CacheHelper>().cacheSessionToken(payload['accessToken']);
+      await sl<CacheHelper>().cacheAccessToken(payload['accessToken']);
       final user = UserModel.fromMap(payload);
       await sl<CacheHelper>().cacheUserId(user.id);
       return user;
@@ -229,10 +227,10 @@ class AuthRemoteDataSrcImpl implements AuthRemoteDataSrc {
       final uri = Uri.parse(
         '${NetworkConstants.baseUrl}$VERIFY_TOKEN_ENDPOINT',
       );
-      debugPrint('ACCESS TOKEN: ${Cache.instance.sessionToken}');
+      debugPrint('ACCESS TOKEN: ${sl<CacheHelper>().getAccessToken()}');
       final response = await _client.get(
         uri,
-        headers: Cache.instance.sessionToken!.toHeaders,
+        headers: sl<CacheHelper>().getAccessToken()?.toHeaders,
       );
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);

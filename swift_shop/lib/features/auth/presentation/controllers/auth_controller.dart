@@ -1,7 +1,11 @@
 import 'package:get/get.dart';
+import 'package:swift_shop/core/router/app_router.dart';
 import 'package:swift_shop/features/auth/presentation/screens/login_screen.dart';
+import 'package:swift_shop/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:swift_shop/features/home/presentation/screens/home_screen.dart';
 
+import '../../../../core/app/cache/cache_helper.dart';
+import '../../../../core/di/injection_container.dart';
 import '../../../profile/domain/models/user_model.dart';
 import '../../domain/repos/auth_repo.dart';
 
@@ -12,6 +16,7 @@ class AuthController extends GetxController {
 
   // Observables for managing state
   var isLoading = false.obs;
+  var isTokenValid = false.obs;
   var user = Rxn<UserModel>();
   var errorMessage = RxnString();
 
@@ -38,7 +43,8 @@ class AuthController extends GetxController {
       (_) {
         Get.snackbar('Success', 'Registration successful');
         isLoading.value = false; // Set loading to false on success
-        Get.offAll(() => const LoginScreen()); // Navigate to the relevant screen
+        Get.offAll(
+            () => const LoginScreen()); // Navigate to the relevant screen
       },
     );
   }
@@ -62,7 +68,25 @@ class AuthController extends GetxController {
         user.value = userModel;
         Get.snackbar('Success', 'Login successful');
         isLoading.value = false;
-        Get.to(() => const HomeScreen());
+        Get.to(() => const DashboardScreen());
+      },
+    );
+  }
+
+  Future<void> tokenVerify() async {
+    final result = await _authRepo.verifyToken();
+    result.fold(
+      (failure) {
+        errorMessage.value = failure.message;
+      },
+      (isValid) async {
+        isTokenValid.value = true;
+        if (isValid) {
+          Get.toNamed(AppRoutes.dashboardScreen);
+        } else {
+          await sl<CacheHelper>().resetSession();
+          Get.toNamed(AppRoutes.loginScreen);
+        }
       },
     );
   }

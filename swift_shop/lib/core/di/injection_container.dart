@@ -1,5 +1,9 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swift_shop/features/categories/data/datasources/category_remote_data_src.dart';
+import 'package:swift_shop/features/categories/data/repos/category_repo_impl.dart';
+import 'package:swift_shop/features/categories/domain/repos/category_repo.dart';
+import 'package:swift_shop/features/categories/presentation/controllers/category_controller.dart';
 import '../../features/auth/data/datasources/auth_remote_data_src.dart';
 import '../../features/auth/data/repos/auth_repo_impl.dart';
 import '../../features/auth/domain/repos/auth_repo.dart';

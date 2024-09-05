@@ -6,6 +6,7 @@ Future<void> init() async {
   sl.registerLazySingleton(http.Client.new);
   await _cacheInit();
   await _userAuthInit();
+  await _categoryInit();
 }
 
 Future<void> _cacheInit() async {
@@ -17,8 +18,8 @@ Future<void> _cacheInit() async {
 
 Future<void> _userAuthInit() async {
   // Registering AuthRemoteDataSrc if not already registered
-  sl.registerLazySingleton<AuthRemoteDataSrc>(
-      () => AuthRemoteDataSrcImpl(sl())); //object initialize and inject dependencies
+  sl.registerLazySingleton<AuthRemoteDataSrc>(() =>
+      AuthRemoteDataSrcImpl(sl())); //object initialize and inject dependencies
 
   // Registering AuthRepo and its implementation
   sl.registerLazySingleton<AuthRepo>(
@@ -27,4 +28,19 @@ Future<void> _userAuthInit() async {
   // Registering AuthController
   sl.registerLazySingleton<AuthController>(
       () => AuthController(sl<AuthRepo>()));
+}
+
+Future<void> _categoryInit() async {
+  // Registering AuthRemoteDataSrc if not already registered
+  sl.registerLazySingleton<CategoryRemoteDataSrc>(() =>
+      CategoryRemoteDataSrcImpl(
+          sl())); //object initialize and inject dependencies
+
+  // Registering AuthRepo and its implementation
+  sl.registerLazySingleton<CategoryRepo>(
+      () => CategoryRepoImpl(sl<CategoryRemoteDataSrc>()));
+
+  // Registering CategoryController
+  sl.registerLazySingleton<CategoryController>(
+      () => CategoryController(sl<CategoryRepo>()));
 }

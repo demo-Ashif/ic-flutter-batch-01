@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:iconly/iconly.dart';
 import 'package:swift_shop/core/extensions/context_extensions.dart';
 import 'package:swift_shop/features/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:swift_shop/features/explore/presentation/screens/explore_screen.dart';
@@ -15,61 +15,52 @@ import '../../../../core/utils/core_utils.dart';
 import '../controller/navigation_controller.dart';
 
 class DashboardScreen extends ConsumerWidget {
-  const DashboardScreen({
-    super.key,
-    required this.state,
-    required this.child,
-  });
-
-  final Widget child;
-  final GoRouterState state;
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeIndex = DashboardUtils.activeIndex(state);
     final activeNavIndex = ref.watch(navigationControllerProvider);
+
     return Scaffold(
-      body: child,
-      bottomNavigationBar: CurvedNavigationBar(
+      body: IndexedStack(
         index: activeNavIndex,
-        backgroundColor: context.theme.scaffoldBackgroundColor,
-        color: CoreUtils.adaptiveColour(
-          context,
-          lightModeColour: Colours.lightThemeWhiteColour,
-          darkModeColour: Colours.darkThemeDarkSharpColour,
-        ),
-        buttonBackgroundColor: Colours.lightThemePrimaryColour,
-        items: DashboardUtils.iconList.mapIndexed((index, icon) {
-          final isActive = activeIndex == activeNavIndex;
-          return Icon(
-            isActive ? icon.$2 : icon.$1,
-            size: 30,
-            color: isActive
-                ? Colours.lightThemeWhiteColour
-                : Colours.lightThemeSecondaryTextColour,
-          );
-        }).toList(),
+        children: const [
+          HomeScreen(),
+          ExploreScreen(),
+          WishlistScreen(),
+          ProfileScreen(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: activeNavIndex,
         onTap: (index) {
-          final router = GoRouter.of(context);
-          final currentIndex = activeNavIndex;
-
           ref.read(navigationControllerProvider.notifier).changeIndex(index);
-
-          switch (index) {
-            case 0:
-              context.go(HomeScreen.path);
-              break;
-            case 1:
-              context.go(ExploreScreen.path);
-              break;
-            case 2:
-              context.go(WishlistScreen.path);
-              break;
-            case 3:
-              context.go(ProfileScreen.path);
-              break;
-          }
         },
+        backgroundColor: context.theme.scaffoldBackgroundColor,
+        selectedItemColor: Colours.lightThemePrimaryColour,
+        unselectedItemColor: Colours.lightThemeSecondaryTextColour,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(IconlyBroken.home),
+            activeIcon: Icon(IconlyBold.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(IconlyBroken.discovery),
+            activeIcon: Icon(IconlyBold.discovery),
+            label: 'Explore',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(IconlyBroken.heart),
+            activeIcon: Icon(IconlyBold.heart),
+            label: 'Wishlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(IconlyBroken.profile),
+            activeIcon: Icon(IconlyBold.profile),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

@@ -28,11 +28,11 @@ class PopularProductScreen extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Gap(20),
             Text(
               'Popular Products',
               style:
                   TextStyles.buttonTextHeadingSemiBold.adaptiveColour(context),
+              textAlign: TextAlign.start,
             ),
             IconButton.filled(
               style: IconButton.styleFrom(

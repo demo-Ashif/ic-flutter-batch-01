@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 
 import '../../../../core/res/styles/colors.dart';
@@ -57,7 +57,7 @@ class RegisterScreen extends StatelessWidget {
                       const TextStyle(color: Colours.lightThemePrimaryColour),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      context.go(LoginScreen.path);
+                      Get.toNamed(LoginScreen.path);
                     },
                 ),
               ],

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:swift_shop/features/home/presentation/widgets/promo_banner.dart';
 import 'package:swift_shop/features/home/presentation/widgets/search_section.dart';
 
 import '../../../products/presentation/screens/popular_product_screen.dart';
-import '../widgets/categories_section.dart';
+import '../../../categories/presentation/widgets/categories_section.dart';
 import '../widgets/home_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -27,9 +27,9 @@ class HomeScreen extends StatelessWidget {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  //promo banner
+                  PromoBanner(),
+                  Gap(16),
                   CategoriesSection(),
-                  //popular products
                   PopularProductScreen()
                   //new arrivals
                 ],

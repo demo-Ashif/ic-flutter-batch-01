@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 import 'package:swift_shop/features/shared/widgets/rounded_button.dart';
 
 import '../../../../core/res/styles/text.dart';
 import '../../../shared/widgets/vertical_label_field.dart';
+import '../controllers/auth_controller.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -19,6 +20,8 @@ class _LoginFormState extends State<LoginForm> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final obscurePasswordNotifier = ValueNotifier(true);
+
+  final AuthController _authController = Get.find<AuthController>();
 
   @override
   void initState() {
@@ -85,10 +88,33 @@ class _LoginFormState extends State<LoginForm> {
           ),
           const Gap(40),
           RoundedButton(
-              onPressed: () {
-                context.go('/', extra: 'home');
+              onPressed: () async {
+                // context.go('/', extra: 'home');
+                if (formKey.currentState!.validate()) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  final emailAddress = emailController.text.trim();
+
+                  final password = passwordController.text.trim();
+
+                  await _authController.login(
+                    email: emailAddress,
+                    password: password,
+                  );
+                }
               },
               text: 'Sign In'),
+          GetBuilder<AuthController>(builder: (authController) {
+            if (authController.isLoading.value) {
+              return const CircularProgressIndicator(); // Show circular progress when loading
+            }
+            if (authController.errorMessage.value != null) {
+              return Text(
+                authController.errorMessage.value!,
+                style: const TextStyle(color: Colors.red),
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
     );

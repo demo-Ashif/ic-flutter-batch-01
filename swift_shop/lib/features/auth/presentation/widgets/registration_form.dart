@@ -209,14 +209,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
             text: 'Sign Up',
           ),
           GetBuilder<AuthController>(builder: (authController) {
-            if (authController.isLoading.value)
+            if (authController.isLoading.value) {
               return const CircularProgressIndicator(); // Show circular progress when loading
-            if (authController.errorMessage.value != null)
+            }
+            if (authController.errorMessage.value != null) {
               return Text(
                 authController.errorMessage.value!,
                 style: const TextStyle(color: Colors.red),
               );
-            return SizedBox.shrink();
+            }
+            return const SizedBox.shrink();
           }),
         ],
       ),

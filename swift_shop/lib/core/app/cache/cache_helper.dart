@@ -1,21 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'cache.dart';
-
 class CacheHelper {
   const CacheHelper(this._prefs);
 
-
   final SharedPreferences _prefs;
-  static const _sessionTokenKey = 'user-session-token';
+  static const _accessTokenKey = 'user-access-token';
   static const _userIdKey = 'user-id';
   static const _firstTimerKey = 'is-user-first-timer';
 
-  Future<bool> cacheSessionToken(String token) async {
+  Future<bool> cacheAccessToken(String token) async {
     try {
-      final result = await _prefs.setString(_sessionTokenKey, token);
-      Cache.instance.setSessionToken(token);
+      final result = await _prefs.setString(_accessTokenKey, token);
       return result;
     } catch (_) {
       return false;
@@ -25,7 +21,6 @@ class CacheHelper {
   Future<bool> cacheUserId(String userId) async {
     try {
       final result = await _prefs.setString(_userIdKey, userId);
-      Cache.instance.setUserId(userId);
       return result;
     } catch (_) {
       return false;
@@ -36,25 +31,26 @@ class CacheHelper {
     await _prefs.setBool(_firstTimerKey, false);
   }
 
-  String? getSessionToken() {
-    // _prefs.remove(_sessionTokenKey);
-    // _prefs.remove(_userIdKey);
-    // _prefs.remove(_firstTimerKey);
-    final sessionToken = _prefs.getString(_sessionTokenKey);
-    if (sessionToken != null) {
-      debugPrint('getSessionToken: Session Token exists');
-      Cache.instance.setSessionToken(sessionToken);
+  bool getFirstTimer() {
+    final isFirstTimer = _prefs.getBool(_firstTimerKey);
+
+    return isFirstTimer ?? true;
+  }
+
+  String? getAccessToken() {
+    final accessToken = _prefs.getString(_accessTokenKey);
+    if (accessToken != null) {
+      debugPrint('getSessionToken: access Token exists');
     } else {
-      debugPrint('getSessionToken: session does not exist');
+      debugPrint('getSessionToken: access does not exist');
     }
-    return sessionToken;
+    return accessToken;
   }
 
   String? getUserId() {
     final userId = _prefs.getString(_userIdKey);
     if (userId != null) {
       debugPrint('getUserId: user exists');
-      Cache.instance.setUserId(userId);
     } else {
       debugPrint('getUserId: user does not exist');
     }
@@ -62,9 +58,8 @@ class CacheHelper {
   }
 
   Future<void> resetSession() async {
-    await _prefs.remove(_sessionTokenKey);
+    await _prefs.remove(_accessTokenKey);
     await _prefs.remove(_userIdKey);
-    Cache.instance.resetSession();
   }
 
   bool isFirstTime() => _prefs.getBool(_firstTimerKey) ?? true;

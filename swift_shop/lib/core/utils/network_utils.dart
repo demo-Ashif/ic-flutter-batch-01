@@ -15,7 +15,7 @@ abstract class NetworkUtils {
       if (token.startsWith('Bearer')) {
         token = token.replaceFirst('Bearer', '').trim();
       }
-      await sl<CacheHelper>().cacheSessionToken(token);
+      await sl<CacheHelper>().cacheAccessToken(token);
     }
   }
 }
