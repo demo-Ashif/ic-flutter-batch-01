@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:swift_shop/features/categories/domain/repos/category_repo.dart';
-import 'package:swift_shop/features/products/domain/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 class CategoryController extends GetxController {
   final CategoryRepo _repo;

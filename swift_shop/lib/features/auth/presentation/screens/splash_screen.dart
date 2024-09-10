@@ -24,23 +24,26 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    // WidgetsBinding.instance.addPostFrameCallback(
-    //   (_) {
-    //     final userId = sl<CacheHelper>().getUserId();
-    //     final accessToken = sl<CacheHelper>().getAccessToken();
-    //     final isFirstTimer = sl<CacheHelper>().getFirstTimer();
-    //
-    //     if (userId != null && accessToken!.isNotEmpty) {
-    //       Get.toNamed(AppRoutes.dashboardScreen);
-    //     } else {
-    //       if (isFirstTimer == true) {
-    //         Get.toNamed(AppRoutes.onboardingScreen);
-    //       } else {
-    //         Get.toNamed(AppRoutes.loginScreen);
-    //       }
-    //     }
-    //   },
-    // );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Call the token verification process from the AuthController
+      _authController.tokenVerify();
+    });
+
+    // Listen to changes in the token verification state to navigate accordingly
+    ever(_authController.isTokenValid, (isValid) {
+      if (isValid == true) {
+        // Token is valid, navigate to the dashboard
+        Get.offAllNamed(AppRoutes.dashboardScreen);
+      } else {
+        // Check other conditions if token is not valid
+        final isFirstTimer = sl<CacheHelper>().getFirstTimer();
+        if (isFirstTimer == true) {
+          Get.offAllNamed(AppRoutes.onboardingScreen);
+        } else {
+          Get.offAllNamed(AppRoutes.loginScreen);
+        }
+      }
+    });
   }
 
   @override

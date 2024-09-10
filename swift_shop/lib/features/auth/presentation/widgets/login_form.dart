@@ -107,12 +107,12 @@ class _LoginFormState extends State<LoginForm> {
             if (authController.isLoading.value) {
               return const CircularProgressIndicator(); // Show circular progress when loading
             }
-            if (authController.errorMessage.value != null) {
-              return Text(
-                authController.errorMessage.value!,
-                style: const TextStyle(color: Colors.red),
-              );
-            }
+            // if (authController.errorMessage.value != null) {
+            //   return Text(
+            //     authController.errorMessage.value!,
+            //     style: const TextStyle(color: Colors.red),
+            //   );
+            // }
             return const SizedBox.shrink();
           }),
         ],

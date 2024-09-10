@@ -1,17 +1,13 @@
-import 'package:collection/collection.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:swift_shop/core/extensions/context_extensions.dart';
-import 'package:swift_shop/features/dashboard/presentation/utils/dashboard_utils.dart';
 import 'package:swift_shop/features/explore/presentation/screens/explore_screen.dart';
 import 'package:swift_shop/features/home/presentation/screens/home_screen.dart';
 import 'package:swift_shop/features/profile/presentation/screens/profile_screen.dart';
 import 'package:swift_shop/features/wishlist/presentation/screens/wishlist_screen.dart';
 
 import '../../../../core/res/styles/colors.dart';
-import '../../../../core/utils/core_utils.dart';
 import '../controller/navigation_controller.dart';
 
 class DashboardScreen extends ConsumerWidget {

@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
-import 'package:swift_shop/features/products/domain/product_model.dart';
+import 'package:swift_shop/features/products/domain/models/product_model.dart';
 
 import '../../../core/res/styles/text.dart';
 import '../../products/presentation/widgets/color_pallete_widget.dart';

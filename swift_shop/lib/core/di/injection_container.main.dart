@@ -7,6 +7,8 @@ Future<void> init() async {
   await _cacheInit();
   await _userAuthInit();
   await _categoryInit();
+  await _productInit();
+  await _cartInit();
 }
 
 Future<void> _cacheInit() async {
@@ -43,4 +45,32 @@ Future<void> _categoryInit() async {
   // Registering CategoryController
   sl.registerLazySingleton<CategoryController>(
       () => CategoryController(sl<CategoryRepo>()));
+}
+
+Future<void> _productInit() async {
+  // Registering AuthRemoteDataSrc if not already registered
+  sl.registerLazySingleton<ProductRemoteDataSrc>(() => ProductRemoteDataSrcImpl(
+      sl())); //object initialize and inject dependencies
+
+  // Registering AuthRepo and its implementation
+  sl.registerLazySingleton<ProductRepo>(
+      () => ProductRepoImpl(sl<ProductRemoteDataSrc>()));
+
+  // Registering CategoryController
+  sl.registerLazySingleton<ProductController>(
+      () => ProductController(sl<ProductRepo>()));
+}
+
+Future<void> _cartInit() async {
+  // Registering AuthRemoteDataSrc if not already registered
+  sl.registerLazySingleton<CartRemoteDataSrc>(() =>
+      CartRemoteDataSrcImpl(sl())); //object initialize and inject dependencies
+
+  // Registering AuthRepo and its implementation
+  sl.registerLazySingleton<CartRepo>(
+      () => CartRepoImpl(sl<CartRemoteDataSrc>()));
+
+  // Registering CategoryController
+  sl.registerLazySingleton<CartController>(
+      () => CartController(sl<CartRepo>()));
 }

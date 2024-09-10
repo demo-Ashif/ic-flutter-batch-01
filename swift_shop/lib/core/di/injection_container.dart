@@ -1,9 +1,17 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:swift_shop/features/cart/data/datasources/cart_remote_data_src.dart';
+import 'package:swift_shop/features/cart/data/repos/cart_repo_impl.dart';
+import 'package:swift_shop/features/cart/domain/repos/cart_repo.dart';
+import 'package:swift_shop/features/cart/presentation/controller/cart_controller.dart';
 import 'package:swift_shop/features/categories/data/datasources/category_remote_data_src.dart';
 import 'package:swift_shop/features/categories/data/repos/category_repo_impl.dart';
 import 'package:swift_shop/features/categories/domain/repos/category_repo.dart';
 import 'package:swift_shop/features/categories/presentation/controllers/category_controller.dart';
+import 'package:swift_shop/features/products/data/product_remote_data_src.dart';
+import 'package:swift_shop/features/products/domain/repo/product_repo.dart';
+import 'package:swift_shop/features/products/presentation/controller/product_controller.dart';
+import 'package:swift_shop/features/products/repo/product_repo_imp.dart';
 import '../../features/auth/data/datasources/auth_remote_data_src.dart';
 import '../../features/auth/data/repos/auth_repo_impl.dart';
 import '../../features/auth/domain/repos/auth_repo.dart';

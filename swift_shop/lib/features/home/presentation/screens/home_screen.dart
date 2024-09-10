@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:swift_shop/features/home/presentation/widgets/promo_banner.dart';
-import 'package:swift_shop/features/home/presentation/widgets/search_section.dart';
 
 import '../../../products/presentation/screens/popular_product_screen.dart';
 import '../../../categories/presentation/widgets/categories_section.dart';
 import '../widgets/home_app_bar.dart';
+import '../widgets/search_section.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

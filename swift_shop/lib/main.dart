@@ -41,6 +41,7 @@ class SwiftShopApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Swift Shop',
       theme: theme,
+      debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.initial,
       // home: const OnBoardingScreen(),
       initialBinding: ControllerBinder(),

@@ -1,4 +1,4 @@
-import 'package:swift_shop/features/products/domain/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 import '../../../../core/utils/typedefs.dart';
 

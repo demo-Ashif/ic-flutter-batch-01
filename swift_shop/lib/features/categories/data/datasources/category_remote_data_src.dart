@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:swift_shop/core/app/cache/cache_helper.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
-import 'package:swift_shop/features/products/domain/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/errors/error_reponse.dart';

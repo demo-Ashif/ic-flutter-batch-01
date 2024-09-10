@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:lottie/lottie.dart';
-import 'package:swift_shop/features/products/domain/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 import '../../../../core/utils/enums/gender_age_category_enum.dart';
 import '../../../shared/widgets/app_bar_bottom.dart';

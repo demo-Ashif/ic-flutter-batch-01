@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
-import 'package:swift_shop/features/products/domain/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 class ProductModel {
   final String id;

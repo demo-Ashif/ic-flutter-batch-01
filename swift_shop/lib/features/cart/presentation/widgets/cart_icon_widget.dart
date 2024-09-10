@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconly/iconly.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
 
 import '../../../../core/res/styles/colors.dart';
+import '../../../../core/router/app_router.dart';
 
 class ReactiveCartIcon extends StatefulWidget {
   const ReactiveCartIcon({super.key});
@@ -26,10 +28,7 @@ class _HomeAppBarCartIconState extends State<ReactiveCartIcon> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => context.push(CartView.path),
-      onTap: () {
-
-      },
+      onTap: () => Get.toNamed(AppRoutes.cartProductScreen),
       child: ValueListenableBuilder(
           valueListenable: countNotifier,
           builder: (_, value, __) {

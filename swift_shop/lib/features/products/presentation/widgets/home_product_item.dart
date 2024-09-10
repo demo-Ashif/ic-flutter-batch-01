@@ -3,10 +3,12 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
-import 'package:swift_shop/features/products/domain/product_model.dart';
+import 'package:swift_shop/core/utils/constants/network_constants.dart';
+import 'package:swift_shop/features/products/domain/models/product_model.dart';
 
 import '../../../../core/res/styles/colors.dart';
 import '../../../../core/res/styles/text.dart';
+import '../../../../core/router/app_router.dart';
 import '../../../../core/utils/core_utils.dart';
 import 'color_pallete_widget.dart';
 import 'favorite_icon.dart';
@@ -22,8 +24,7 @@ class HomeProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      // onTap: () => context.push('/products/${product.id}'),
-      onTap: () => Get.toNamed('/products/${product.id}'),
+      onTap: () => Get.toNamed('${AppRoutes.productDetailScreen}?productId=${product.id}'),
       child: Container(
         height: 228,
         width: 196,
@@ -50,7 +51,7 @@ class HomeProductItem extends StatelessWidget {
                         color: const Color(0xfff0f0f0),
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                          image: NetworkImage(product.image),
+                          image: NetworkImage('${NetworkConstants.imageBaseUrl}/${product.image}'),
                         ),
                       )),
                   Positioned(

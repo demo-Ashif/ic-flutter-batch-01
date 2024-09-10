@@ -76,16 +76,15 @@ class AuthController extends GetxController {
   Future<void> tokenVerify() async {
     final result = await _authRepo.verifyToken();
     result.fold(
-      (failure) {
+      (failure) async{
+        await sl<CacheHelper>().resetSession();
+        isTokenValid.value = false;
         errorMessage.value = failure.message;
       },
       (isValid) async {
         isTokenValid.value = true;
-        if (isValid) {
-          Get.toNamed(AppRoutes.dashboardScreen);
-        } else {
+        if (!isValid) {
           await sl<CacheHelper>().resetSession();
-          Get.toNamed(AppRoutes.loginScreen);
         }
       },
     );
