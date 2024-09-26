@@ -66,7 +66,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           children: [
             Image.asset(
               Media.onBoardingFemale,
-              height: 400,
+              height: 380,
             ),
             const SizedBox(height: 20),
             Text.rich(
@@ -111,7 +111,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           children: [
             Image.asset(
               Media.onBoardingMale,
-              height: 400,
+              height: 380,
             ),
             // Update the image path as needed
             const SizedBox(height: 20),

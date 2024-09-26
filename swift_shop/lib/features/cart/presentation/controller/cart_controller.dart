@@ -51,7 +51,86 @@ class CartController extends GetxController {
     update();
   }
 
-//remove from cart
+// Remove from cart
+  Future<void> removeFromCart({
+    required String userId,
+    required String cartProductId,
+  }) async {
+    isLoading(true);
+    errorMessage('');
 
-//update quantity
+    final result = await _repo.removeFromCart(
+      userId: userId,
+      cartProductId: cartProductId,
+    );
+
+    result.fold(
+          (failure) => errorMessage(failure.message), // Handle error case
+          (success) => getCartProducts(userId), // Refresh cart
+    );
+    isLoading(false);
+    update();
+  }
+
+  // Update quantity of a cart product
+  Future<void> changeCartProductQuantity({
+    required String userId,
+    required String cartProductId,
+    required int newQuantity,
+  }) async {
+    isLoading(true);
+    errorMessage('');
+
+    final result = await _repo.changeCartProductQuantity(
+      userId: userId,
+      cartProductId: cartProductId,
+      newQuantity: newQuantity,
+    );
+
+    result.fold(
+          (failure) => errorMessage(failure.message), // Handle error case
+          (success) => getCartProducts(userId), // Refresh cart
+    );
+    isLoading(false);
+    update();
+  }
+
+  // Get cart product count
+  Future<int> getCartCount(String userId) async {
+    isLoading(true);
+    errorMessage('');
+
+    final result = await _repo.getCartCount(userId);
+
+    int count = 0;
+    result.fold(
+          (failure) => errorMessage(failure.message), // Handle error case
+          (cartCount) => count = cartCount, // Update count
+    );
+    isLoading(false);
+    return count;
+  }
+
+  // Get individual cart product
+  Future<CartProductModel?> getCartProduct({
+    required String userId,
+    required String cartProductId,
+  }) async {
+    isLoading(true);
+    errorMessage('');
+
+    CartProductModel? product;
+
+    final result = await _repo.getCartProduct(
+      userId: userId,
+      cartProductId: cartProductId,
+    );
+
+    result.fold(
+          (failure) => errorMessage(failure.message), // Handle error case
+          (cartProduct) => product = cartProduct, // Return cart product
+    );
+    isLoading(false);
+    return product;
+  }
 }

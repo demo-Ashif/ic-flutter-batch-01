@@ -16,7 +16,6 @@ import '../widgets/cart_product_title.dart';
 class CartProductScreen extends StatefulWidget {
   const CartProductScreen({super.key});
 
-
   @override
   State<CartProductScreen> createState() => _CartProductScreenState();
 }
@@ -26,8 +25,7 @@ class _CartProductScreenState extends State<CartProductScreen> {
 
   Future<void> getCart() async {
     final userId = sl<CacheHelper>().getUserId();
-    await cartController
-        .getCartProducts('$userId'); // Replace with actual user ID
+    await cartController.getCartProducts(userId!);
   }
 
   @override
@@ -49,12 +47,10 @@ class _CartProductScreenState extends State<CartProductScreen> {
               title: const Text('My Cart'),
               bottom: const PreferredSize(
                 preferredSize: Size.fromHeight(50),
-                child:
-                    AppBarBottom(), // Assuming AppBarBottom is a custom widget
+                child: AppBarBottom(),
               ),
               actions: [
                 const SearchButton(),
-                // Assuming SearchButton is a custom widget
                 const Gap(5),
                 if (controller.cartProducts.isNotEmpty)
                   IconButton(
@@ -64,12 +60,13 @@ class _CartProductScreenState extends State<CartProductScreen> {
                         message: 'Are you sure you want to remove these items?',
                       );
                       if (shouldDelete) {
-                        // controller.removeBulkProducts(
-                        //   controller.cart
-                        //       .map((product) => product.productId)
-                        //       .toList(),
-                        //   'USER_ID_HERE', // Replace with actual user ID
-                        // );
+                        // Remove all selected products
+                        for (final product in controller.cartProducts) {
+                          await controller.removeFromCart(
+                            userId: sl<CacheHelper>().getUserId()!,
+                            cartProductId: product.productId,
+                          );
+                        }
                       }
                     },
                     icon: const Icon(IconlyBroken.delete),
@@ -96,8 +93,7 @@ class _CartProductScreenState extends State<CartProductScreen> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Lottie.asset('assets/lottie/empty_cart.json',
-                                repeat: false),
+                            Lottie.asset('assets/lottie/empty_cart.json', repeat: false),
                             const Gap(5),
                             const Text(
                               'Oh! So empty',
@@ -121,8 +117,7 @@ class _CartProductScreenState extends State<CartProductScreen> {
                           children: [
                             Text(
                               '${controller.cartProducts.length} item(s)',
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -133,13 +128,11 @@ class _CartProductScreenState extends State<CartProductScreen> {
                           itemCount: controller.cartProducts.length,
                           itemBuilder: (context, index) {
                             final product = controller.cartProducts[index];
-                            return CartProductTile(product); // Assuming CartProductTile is a custom widget
+                            return CartProductTile(product);
                           },
                           separatorBuilder: (_, __) => const Gap(20),
                         ),
                       ),
-                      // CheckoutButton(products: controller.cart),
-                      // Assuming CheckoutButton is a custom widget
                     ],
                   );
                 },
@@ -151,3 +144,4 @@ class _CartProductScreenState extends State<CartProductScreen> {
     );
   }
 }
+

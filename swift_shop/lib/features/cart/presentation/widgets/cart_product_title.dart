@@ -5,6 +5,8 @@ import 'package:iconly/iconly.dart';
 import 'package:swift_shop/core/utils/constants/network_constants.dart';
 import 'package:swift_shop/features/cart/domain/models/cart_product_model.dart';
 
+import '../../../../core/app/cache/cache_helper.dart';
+import '../../../../core/di/injection_container.dart';
 import '../controller/cart_controller.dart';
 
 class CartProductTile extends StatelessWidget {
@@ -16,18 +18,13 @@ class CartProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get the controller
-
+    // Disable actions for out-of-stock or non-existent products
     bool isDisabled = !product.productExists || product.productOutOfStock;
 
     return AbsorbPointer(
       absorbing: isDisabled,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        // onLongPress: () => controller.toggleSelection(product.productId),
-        onLongPress: () {
-
-        },
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -92,53 +89,46 @@ class CartProductTile extends StatelessWidget {
                           ),
                           if (product.selectedSize != null)
                             Text('Size: ${product.selectedSize}'),
-                          GetBuilder<CartController>(
-                            builder: (controller) {
-                              // final isSelected = controller.isSelected(product.productId);
-                              final isSelected = false;
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      // int newQuantity = product.quantity +
-                                      //     1; // Update quantity logic here
-                                      // controller.updateQuantity(
-                                      //     product.productId, newQuantity);
-                                    },
-                                    icon: const Icon(Icons.add),
-                                  ),
-                                  Text(product.quantity.toString()),
-                                  IconButton(
-                                    onPressed: () {
-                                      // if (product.quantity > 1) {
-                                      //   int newQuantity = product.quantity - 1;
-                                      //   controller.updateQuantity(
-                                      //       product.productId, newQuantity);
-                                      // }
-                                    },
-                                    icon: const Icon(Icons.remove),
-                                  ),
-                                  if (isSelected)
-                                    IconButton(
-                                      // onPressed: () => controller.toggleSelection(product.productId),
-                                      onPressed: (){},
-                                      icon: const Icon(IconlyLight.tick_square,
-                                          color: Colors.green),
-                                    )
-                                  else
-                                    IconButton(
-                                      // onPressed: () => controller.removeProduct(product.productId),
-                                      onPressed: () {
-
-                                      },
-                                      icon: const Icon(IconlyBroken.delete),
-                                      color: Colors.red,
-                                    ),
-                                ],
-                              );
-                            },
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  // Increase quantity
+                                  controller.changeCartProductQuantity(
+                                    userId: '${sl<CacheHelper>().getUserId()}', // Replace with actual userId
+                                    cartProductId: product.productId,
+                                    newQuantity: product.quantity + 1,
+                                  );
+                                },
+                                icon: const Icon(Icons.add),
+                              ),
+                              Text(product.quantity.toString()),
+                              IconButton(
+                                onPressed: () {
+                                  if (product.quantity > 1) {
+                                    // Decrease quantity
+                                    controller.changeCartProductQuantity(
+                                      userId: '${sl<CacheHelper>().getUserId()}', // Replace with actual userId
+                                      cartProductId: product.productId,
+                                      newQuantity: product.quantity - 1,
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.remove),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  // Remove product from cart
+                                  controller.removeFromCart(
+                                    userId: '${sl<CacheHelper>().getUserId()}', // Replace with actual userId
+                                    cartProductId: product.productId,
+                                  );
+                                },
+                                icon: const Icon(IconlyBroken.delete),
+                                color: Colors.red,
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -157,9 +147,12 @@ class CartProductTile extends StatelessWidget {
               ),
               const Gap(10),
               ElevatedButton(
-                // onPressed: () => controller.removeProduct(product.productId),
                 onPressed: () {
-
+                  // Remove product if out of stock or doesn't exist
+                  controller.removeFromCart(
+                    userId: '${sl<CacheHelper>().getUserId()}', // Replace with actual userId
+                    cartProductId: product.productId,
+                  );
                 },
                 child: const Text('REMOVE'),
               ),
@@ -170,3 +163,4 @@ class CartProductTile extends StatelessWidget {
     );
   }
 }
+

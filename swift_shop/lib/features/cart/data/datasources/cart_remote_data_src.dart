@@ -55,9 +55,9 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
   @override
   Future<List<CartProductModel>> getCart(String userId) async {
     try {
-      final uri = Uri.http(
-        NetworkConstants.authority,
-        '${NetworkConstants.apiUrl}${_userCartEndpoint(userId)}',
+      final uri = Uri.parse(
+        // NetworkConstants.authority,
+        '${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}',
       );
 
       final response = await _client.get(
@@ -237,10 +237,12 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
     required int newQuantity,
   }) async {
     try {
-      final uri = Uri.http(
-        NetworkConstants.authority,
-        '${NetworkConstants.apiUrl}${_userCartEndpoint(userId)}/$cartProductId',
+      final uri = Uri.parse(
+        // NetworkConstants.authority,
+        '${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}/$cartProductId',
       );
+
+      debugPrint('${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}/$cartProductId');
 
       final response = await _client.put(
         uri,
