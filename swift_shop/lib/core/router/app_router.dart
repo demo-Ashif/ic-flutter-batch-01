@@ -8,4 +8,5 @@ class AppRoutes{
   static String dashboardScreen = '/dashboard';
   static String productDetailScreen = '/product-detail';
   static String cartProductScreen = '/cart-product-view';
+  static String checkoutScreen = '/checkout';
 }

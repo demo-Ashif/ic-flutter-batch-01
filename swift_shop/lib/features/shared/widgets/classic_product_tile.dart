@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
+import 'package:swift_shop/core/utils/constants/network_constants.dart';
 import 'package:swift_shop/features/products/domain/models/product_model.dart';
 
 import '../../../core/res/styles/text.dart';
@@ -35,7 +36,7 @@ class ClassicProductTile extends StatelessWidget {
                       color: const Color(0xfff0f0f0),
                       borderRadius: BorderRadius.circular(16),
                       image: DecorationImage(
-                        image: NetworkImage(product.image),
+                        image: NetworkImage('${NetworkConstants.imageBaseUrl}/${product.image}'),
                       )),
                 ),
                 Positioned(

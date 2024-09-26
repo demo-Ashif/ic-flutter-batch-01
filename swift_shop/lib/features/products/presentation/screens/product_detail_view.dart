@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:swift_shop/core/app/cache/cache_helper.dart';
 import 'package:swift_shop/core/extensions/int_extensions.dart';
 import 'package:swift_shop/core/extensions/text_style_extensions.dart';
+import 'package:swift_shop/core/extensions/widget_extensions.dart';
 import 'package:swift_shop/core/router/app_router.dart';
 import 'package:swift_shop/core/utils/constants/network_constants.dart';
 import 'package:swift_shop/features/cart/presentation/controller/cart_controller.dart';
@@ -21,29 +22,30 @@ import '../../../shared/widgets/rounded_button.dart';
 import '../controller/product_controller.dart';
 import '../widgets/color_pallete_widget.dart';
 import '../widgets/favorite_icon.dart';
+import '../widgets/review_previews.dart';
 import '../widgets/size_picker.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen(this.productId, {super.key});
+class ProductDetailsView extends StatefulWidget {
+  const ProductDetailsView(this.productId, {super.key});
 
   final String productId;
 
   @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
+  State<ProductDetailsView> createState() => _ProductDetailsViewState();
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+class _ProductDetailsViewState extends State<ProductDetailsView> {
   String? selectedSize;
   Color? selectedColour;
 
   final ProductController productController = Get.find<ProductController>();
-  final CartController cartController = Get.find<CartController>();
+  final CartController controller = Get.find<CartController>();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      productController.fetchProductById(widget.productId);
+      productController.fetchProduct(widget.productId); // Fetch product using GetX
     });
   }
 
@@ -56,8 +58,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             title: const Text('Details'),
             bottom: const AppBarBottom(),
             actions: [
-              if (controller.productDetail.value != null)
-                FavouriteIcon(productId: controller.productDetail.value.id),
+              if (controller.selectedProduct.value != null)
+                FavouriteIcon(productId: controller.selectedProduct.value!.id),
               const Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: ReactiveCartIcon(),
@@ -66,21 +68,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           body: Builder(
             builder: (context) {
-              if (controller.isLoadingProductDetail.value) {
+              if (controller.isLoading.value) {
                 return const Center(
                   child: CircularProgressIndicator.adaptive(
                     backgroundColor: Colours.lightThemePrimaryColour,
                   ),
                 );
-              } else if (controller.productDetail.value != null) {
-                final product = controller.productDetail.value!;
+              } else if (controller.selectedProduct.value != null) {
+                final product = controller.selectedProduct.value!;
                 return Column(
                   children: [
                     Expanded(
                       child: ListView(
                         shrinkWrap: true,
                         children: [
-                          // images
+                          // Display Product Images
                           Builder(builder: (context) {
                             var images = product.images;
                             if (images.isEmpty) images = [product.image];
@@ -99,8 +101,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       decoration: BoxDecoration(
                                         color: const Color(0xfff0f0f0),
                                         image: DecorationImage(
-                                          image: NetworkImage(
-                                              '${NetworkConstants.imageBaseUrl}/$image'),
+                                          image: NetworkImage('${NetworkConstants.imageBaseUrl}/$image'),
                                         ),
                                       ),
                                     );
@@ -109,10 +110,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               }).toList(),
                             );
                           }),
-                          // name and price
+                          // Product name and price
                           Padding(
-                            padding:
-                                const EdgeInsets.all(20).copyWith(bottom: 2),
+                            padding: const EdgeInsets.all(20).copyWith(bottom: 2),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,8 +122,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     Expanded(
                                       child: Text(
                                         product.name,
-                                        style: TextStyles.headingMedium4
-                                            .adaptiveColour(context),
+                                        style: TextStyles.headingMedium4.adaptiveColour(context),
                                       ),
                                     ),
                                     const Gap(10),
@@ -145,14 +144,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     const Gap(3),
                                     Text(
                                       product.rating.toStringAsFixed(1),
-                                      style: TextStyles.paragraphSubTextRegular2
-                                          .adaptiveColour(context),
+                                      style: TextStyles.paragraphSubTextRegular2.adaptiveColour(context),
                                     ),
                                     Text(
                                       ' (${product.numberOfReviews.pluralizeReviews})',
                                       style: const TextStyle(
-                                        color: Colours
-                                            .lightThemeSecondaryTextColour,
+                                        color: Colours.lightThemeSecondaryTextColour,
                                       ),
                                     ),
                                   ],
@@ -168,7 +165,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ),
                           const Gap(10),
-                          // description
+                          // Product description, colors, and sizes
                           Padding(
                             padding: const EdgeInsets.all(20).copyWith(top: 0),
                             child: Column(
@@ -201,8 +198,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 const Gap(20),
                                 Text(
                                   'Description',
-                                  style: TextStyles.headingMedium3
-                                      .adaptiveColour(context),
+                                  style: TextStyles.headingMedium3.adaptiveColour(context),
                                 ),
                                 const Gap(5),
                                 ExpandableText(
@@ -211,53 +207,51 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   style: TextStyles.paragraphRegular.grey,
                                 ),
                                 const Gap(30),
-                                // ReviewsPreview(product: product),
+                                // ReviewsPreview(product: product) // Assuming ReviewsPreview uses GetX now
                               ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
-                    // add to cart
+                    // Add to cart button
                     Padding(
                       padding: const EdgeInsets.all(20).copyWith(bottom: 40),
-                      child: RoundedButton(
-                        height: 50,
-                        onPressed: () {
-                          if (product.colours.isNotEmpty &&
-                              selectedColour == null) {
-                            CoreUtils.showSnackBar(
-                              context,
-                              message: 'Pick a colour',
-                              backgroundColour: Colors.red.withOpacity(.8),
-                            );
-                            return;
-                          } else if (product.sizes.isNotEmpty &&
-                              selectedSize == null) {
-                            CoreUtils.showSnackBar(
-                              context,
-                              message: 'Pick a size',
-                              backgroundColour: Colors.red.withOpacity(.8),
-                            );
-                            return;
-                          }
+                      child: GetBuilder<CartController>(
+                        builder: (cartController) {
+                          return RoundedButton(
+                            height: 50,
+                            onPressed: () {
+                              if (product.colours.isNotEmpty && selectedColour == null) {
+                                CoreUtils.showSnackBar(
+                                  context,
+                                  message: 'Pick a colour',
+                                  backgroundColour: Colors.red.withOpacity(.8),
+                                );
+                                return;
+                              } else if (product.sizes.isNotEmpty && selectedSize == null) {
+                                CoreUtils.showSnackBar(
+                                  context,
+                                  message: 'Pick a size',
+                                  backgroundColour: Colors.red.withOpacity(.8),
+                                );
+                                return;
+                              }
 
-                          // Add product to cart
-                          cartController.addToCart(
-                            userId: '${sl<CacheHelper>().getUserId()}',
-                            cartProductModel:
-                                const CartProductModel.empty().copyWith(
-                              productId: product.id,
-                              quantity: 1,
-                              selectedSize: selectedSize,
-                              selectedColour: selectedColour,
-                            ),
-                          );
+                              cartController.addToCart(
+                                userId: '${sl<CacheHelper>().getUserId()}',
+                                cartProduct: const CartProductModel.empty().copyWith(
+                                  productId: product.id,
+                                  quantity: 1,
+                                  selectedSize: selectedSize,
+                                  selectedColour: selectedColour,
+                                ),
+                              );
+                            },
+                            text: 'Add to Cart',
+                            textStyle: TextStyles.buttonTextHeadingSemiBold.copyWith(fontSize: 16).white,
+                          ).loading(cartController.isAddingToCart.value);
                         },
-                        text: 'Add to Cart',
-                        textStyle: TextStyles.buttonTextHeadingSemiBold
-                            .copyWith(fontSize: 16)
-                            .white,
                       ),
                     ),
                   ],
@@ -271,3 +265,4 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 }
+

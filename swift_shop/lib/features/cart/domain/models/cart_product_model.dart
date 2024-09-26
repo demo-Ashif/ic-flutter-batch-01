@@ -64,7 +64,7 @@ class CartProductModel extends Equatable {
       productImage: json['productImage'] as String,
       productPrice: (json['productPrice'] as num).toDouble(),
       selectedSize: json['selectedSize'] as String?,
-      selectedColour: json['selectedColour']?.toString().colour,
+      selectedColour: (json['selectedColour'] as String?)?.colour,
       productExists: json['productExists'] as bool,
       productOutOfStock: json['productOutOfStock'] as bool,
     );

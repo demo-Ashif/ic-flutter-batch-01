@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:swift_shop/features/profile/domain/models/address.dart';
-import 'package:swift_shop/features/wishlist/domain/models/wishlist_product.dart';
+import 'package:swift_shop/features/wishlist/domain/models/wishlist_product_model.dart';
 
 import '../../../../core/utils/typedefs.dart';
 

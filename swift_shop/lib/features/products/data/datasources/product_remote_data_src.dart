@@ -4,16 +4,16 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../core/app/cache/cache_helper.dart';
-import '../../../core/di/injection_container.dart';
-import '../../../core/errors/error_reponse.dart';
-import '../../../core/errors/exceptions.dart';
-import '../../../core/utils/constants/network_constants.dart';
-import '../../../core/utils/network_utils.dart';
-import '../../../core/utils/typedefs.dart';
-import '../domain/models/product_category.dart';
-import '../domain/models/product_model.dart';
-import '../domain/models/review_model.dart';
+import '../../../../core/app/cache/cache_helper.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../../core/errors/error_reponse.dart';
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/utils/constants/network_constants.dart';
+import '../../../../core/utils/network_utils.dart';
+import '../../../../core/utils/typedefs.dart';
+import '../../domain/models/product_category.dart';
+import '../../domain/models/product_model.dart';
+import '../../domain/models/review_model.dart';
 
 import 'package:swift_shop/core/extensions/string_extensions.dart';
 
@@ -31,11 +31,11 @@ abstract class ProductRemoteDataSrc {
     required int page,
     String? categoryId,
   });
+
   Future<List<ProductModel>> getPopular({
     required int page,
     String? categoryId,
   });
-
 
   Future<List<ProductModel>> searchAllProducts({
     required String query,
@@ -123,8 +123,9 @@ class ProductRemoteDataSrcImpl implements ProductRemoteDataSrc {
   @override
   Future<ProductModel> getProduct(String productId) async {
     try {
-      final uri = Uri.parse(
-        '${NetworkConstants.baseUrl}$GET_PRODUCTS_ENDPOINT/$productId',
+      final uri = Uri.http(
+        NetworkConstants.authority,
+        '${NetworkConstants.apiUrl}$GET_PRODUCTS_ENDPOINT/$productId',
       );
 
       final response = await _client.get(
@@ -233,6 +234,7 @@ class ProductRemoteDataSrcImpl implements ProductRemoteDataSrc {
       throw ServerException(message: e.toString(), statusCode: 500);
     }
   }
+
   @override
   Future<List<ProductModel>> getPopular({
     required int page,
@@ -485,7 +487,7 @@ class ProductRemoteDataSrcImpl implements ProductRemoteDataSrc {
 
       final response = await _client.post(
         uri,
-        headers:sl<CacheHelper>().getAccessToken()?.toHeaders,
+        headers: sl<CacheHelper>().getAccessToken()?.toHeaders,
         body: jsonEncode({
           'user': userId,
           'comment': comment,

@@ -3,11 +3,11 @@ import 'package:swift_shop/features/products/domain/models/product_category.dart
 import 'package:swift_shop/features/products/domain/models/product_model.dart';
 import 'package:swift_shop/features/products/domain/models/review_model.dart';
 
-import '../../../core/errors/exceptions.dart';
-import '../../../core/errors/failures.dart';
-import '../../../core/utils/typedefs.dart';
-import '../data/product_remote_data_src.dart';
-import '../domain/repo/product_repo.dart';
+import '../../../../core/errors/exceptions.dart';
+import '../../../../core/errors/failures.dart';
+import '../../../../core/utils/typedefs.dart';
+import '../datasources/product_remote_data_src.dart';
+import '../../domain/repo/product_repo.dart';
 
 class ProductRepoImpl implements ProductRepo {
   const ProductRepoImpl(this._remoteDataSource);

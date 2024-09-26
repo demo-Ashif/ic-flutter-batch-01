@@ -1,32 +1,43 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:swift_shop/features/categories/domain/repos/category_repo.dart';
 import 'package:swift_shop/features/products/domain/models/product_category.dart';
 
 class CategoryController extends GetxController {
-  final CategoryRepo _repo;
+  final CategoryRepo _categoryRepository;
 
-  CategoryController(this._repo);
+  CategoryController(this._categoryRepository);
 
-  // Observables for managing state
+  var categoriesList = <ProductCategoryModel>[].obs;
   var isLoading = false.obs;
-  var categoriesList = Rxn<List<ProductCategoryModel>>();
-  var errorMessage = RxnString();
+  var errorMessage = ''.obs;
 
-  // Function to handle user login
+
+
   Future<void> getCategories() async {
-    isLoading.value = true;
-    final result = await _repo.getCategories();
-    result.fold(
-      (failure) {
-        isLoading.value = false;
-        errorMessage.value = failure.message;
-        update();
-      },
-      (categories) {
-        isLoading.value = false;
-        categoriesList.value = categories;
-        update();
-      },
-    );
+    try {
+      isLoading.value = true;
+      update(); // Notify GetBuilder to show the loading state
+
+      final result = await _categoryRepository.getCategories();
+
+      result.fold(
+            (failure) {
+          errorMessage.value = failure.message;
+          update(); // Notify GetBuilder about the error
+        },
+            (categories) {
+          categoriesList.assignAll(categories);
+          update(); // Notify GetBuilder about the fetched data
+        },
+      );
+    } catch (e) {
+      errorMessage.value = e.toString();
+      update(); // Notify GetBuilder about the error
+    } finally {
+      isLoading.value = false;
+      update(); // Notify GetBuilder about the loading completion
+    }
   }
 }
+

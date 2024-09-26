@@ -3,86 +3,223 @@ import 'package:get/get.dart';
 import '../../domain/models/product_model.dart';
 import '../../domain/repo/product_repo.dart';
 
+import 'package:swift_shop/features/products/domain/models/product_category.dart';
+import 'package:swift_shop/features/products/domain/models/review_model.dart';
+
 class ProductController extends GetxController {
-  final ProductRepo _productRepo;
+  final ProductRepo _repo;
 
-  ProductController(this._productRepo);
+  ProductController(this._repo);
 
-  // Observables for different API responses
+  // Observables
+  var isLoading = false.obs;
+  var isSearching = false.obs;
+  var isReviewing = false.obs;
   var products = <ProductModel>[].obs;
-  var newArrivals = <ProductModel>[].obs;
-  var popularProducts = <ProductModel>[].obs;
+  var categories = <ProductCategoryModel>[].obs;
+  var reviews = <ReviewModel>[].obs;
+  var selectedProduct = Rxn<ProductModel>();
+  var selectedCategory = Rxn<ProductCategoryModel>();
+  var errorMessage = ''.obs;
 
-  var productDetail = const ProductModel.empty().obs;
+  /// Fetch all categories
+  Future<void> fetchCategories() async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getCategories();
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedCategories) => categories.value = fetchedCategories,
+      );
+    } finally {
+      isLoading.value = false;
+      update(); // Notify listeners
+    }
+  }
 
-  // Loading states for the different API calls
-  var isLoadingProducts = false.obs;
-  var isLoadingProductDetail = false.obs;
-  var isLoadingNewArrivals = false.obs;
-  var isLoadingPopular = false.obs;
+  /// Fetch a specific category by ID
+  Future<void> fetchCategory(String categoryId) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getCategory(categoryId);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (category) => selectedCategory.value = category,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
 
-  // Error messages for the different API calls
-  var productsError = ''.obs;
-  var newArrivalsError = ''.obs;
-  var popularError = ''.obs;
+  /// Fetch new arrivals
+  Future<void> fetchNewArrivals({required int page, String? categoryId}) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getNewArrivals(page: page, categoryId: categoryId);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
 
-  // Fetch products
+  /// Fetch popular products
+  Future<void> fetchPopular({required int page, String? categoryId}) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getPopular(page: page, categoryId: categoryId);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
+
+  /// Fetch product by ID
+  Future<void> fetchProduct(String productId) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getProduct(productId);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (product) => selectedProduct.value = product,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
+
+  /// Fetch reviews for a product
+  Future<void> fetchProductReviews({required String productId, required int page}) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getProductReviews(productId: productId, page: page);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedReviews) => reviews.value = fetchedReviews,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
+  }
+
+  /// Fetch all products
   Future<void> fetchProducts(int page) async {
-    isLoadingProducts(true);
-    productsError('');
-    final result = await _productRepo.getProducts(page);
-
-    result.fold(
-      (failure) => productsError(failure.message), // Handle error case
-      (productList) =>
-          products.assignAll(productList), // Assign result to observable list
-    );
-    isLoadingProducts(false);
+    try {
+      isLoading.value = true;
+      final result = await _repo.getProducts(page);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
   }
 
-  // Fetch new arrivals
-  Future<void> fetchNewArrivals(int page, {String? categoryId}) async {
-    isLoadingNewArrivals(true);
-    newArrivalsError('');
-    final result =
-        await _productRepo.getNewArrivals(page: page, categoryId: categoryId);
-
-    result.fold(
-      (failure) => newArrivalsError(failure.message), // Handle error case
-      (newArrivalList) => newArrivals
-          .assignAll(newArrivalList), // Assign result to observable list
-    );
-    isLoadingNewArrivals(false);
+  /// Fetch products by category
+  Future<void> fetchProductsByCategory({required String categoryId, required int page}) async {
+    try {
+      isLoading.value = true;
+      final result = await _repo.getProductsByCategory(categoryId: categoryId, page: page);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isLoading.value = false;
+      update();
+    }
   }
 
-  // Fetch popular products
-  Future<void> fetchPopularProducts(int page, {String? categoryId}) async {
-    isLoadingPopular(true);
-    popularError('');
-    final result =
-        await _productRepo.getPopular(page: page, categoryId: categoryId);
-
-    result.fold(
-      (failure) => popularError(failure.message), // Handle error case
-      (popularList) => popularProducts
-          .assignAll(popularList), // Assign result to observable list
-    );
-    isLoadingPopular(false);
-    update();
+  /// Leave a review for a product
+  Future<void> leaveReview({
+    required String productId,
+    required String userId,
+    required String comment,
+    required double rating,
+  }) async {
+    try {
+      isReviewing.value = true;
+      final result = await _repo.leaveReview(
+          productId: productId,
+          userId: userId,
+          comment: comment,
+          rating: rating
+      );
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (_) => Get.snackbar('Success', 'Review added successfully'),
+      );
+    } finally {
+      isReviewing.value = false;
+      update();
+    }
   }
 
-  // Fetch popular products
-  Future<void> fetchProductById(String productId) async {
-    isLoadingProductDetail(true);
-    productsError('');
-    final result = await _productRepo.getProduct(productId);
+  /// Search all products
+  Future<void> searchAllProducts({required String query, required int page}) async {
+    try {
+      isSearching.value = true;
+      final result = await _repo.searchAllProducts(query: query, page: page);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isSearching.value = false;
+      update();
+    }
+  }
 
-    result.fold(
-      (failure) => productsError(failure.message), // Handle error case
-      (product) =>
-          productDetail.value = product, // Assign result to observable list
-    );
-    isLoadingProductDetail(false);
-    update();
+  /// Search products by category
+  Future<void> searchByCategory({required String query, required String categoryId, required int page}) async {
+    try {
+      isSearching.value = true;
+      final result = await _repo.searchByCategory(query: query, categoryId: categoryId, page: page);
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isSearching.value = false;
+      update();
+    }
+  }
+
+  /// Search products by category and gender/age category
+  Future<void> searchByCategoryAndGenderAgeCategory({
+    required String query,
+    required String categoryId,
+    required String genderAgeCategory,
+    required int page,
+  }) async {
+    try {
+      isSearching.value = true;
+      final result = await _repo.searchByCategoryAndGenderAgeCategory(
+          query: query,
+          categoryId: categoryId,
+          genderAgeCategory: genderAgeCategory,
+          page: page
+      );
+      result.fold(
+            (failure) => errorMessage.value = failure.errorMessage,
+            (fetchedProducts) => products.value = fetchedProducts,
+      );
+    } finally {
+      isSearching.value = false;
+      update();
+    }
   }
 }
+

@@ -10,25 +10,25 @@ import '../../../../core/res/styles/colors.dart';
 import '../../../../core/res/styles/text.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/utils/core_utils.dart';
-import 'color_pallete_widget.dart';
-import 'favorite_icon.dart';
+import '../../../products/presentation/widgets/color_pallete_widget.dart';
+import '../../../products/presentation/widgets/favorite_icon.dart';
 
-class HomeProductItem extends StatelessWidget {
-  const HomeProductItem({
-    super.key,
-    required this.product,
-  });
+class HomeProductTile extends StatelessWidget {
+  const HomeProductTile(this.product, {super.key, this.margin});
 
   final ProductModel product;
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => Get.toNamed('${AppRoutes.productDetailScreen}?productId=${product.id}'),
       child: Container(
         height: 228,
         width: 196,
-        margin: const EdgeInsets.only(right: 10),
+        margin: margin,
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: CoreUtils.adaptiveColour(
@@ -45,15 +45,15 @@ class HomeProductItem extends StatelessWidget {
               child: Stack(
                 children: [
                   Container(
-                      height: 131,
-                      width: 180,
-                      decoration: BoxDecoration(
+                    height: 131,
+                    width: 180,
+                    decoration: BoxDecoration(
                         color: const Color(0xfff0f0f0),
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
                           image: NetworkImage('${NetworkConstants.imageBaseUrl}/${product.image}'),
-                        ),
-                      )),
+                        )),
+                  ),
                   Positioned(
                       right: 0, child: FavouriteIcon(productId: product.id)),
                 ],
@@ -72,7 +72,7 @@ class HomeProductItem extends StatelessWidget {
                   Flexible(
                     child: ColourPalette(
                       colours: product.colours.take(3).toList(),
-                      radius: 8,
+                      radius: 5,
                     ),
                   ),
                 ],

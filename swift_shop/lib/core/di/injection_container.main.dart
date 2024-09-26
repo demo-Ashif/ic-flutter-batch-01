@@ -10,6 +10,7 @@ Future<void> init() async {
   await _productInit();
   await _cartInit();
   await _profileInit();
+  await _wishlistInit();
 }
 
 Future<void> _cacheInit() async {
@@ -88,4 +89,18 @@ Future<void> _profileInit() async {
   // Registering CategoryController
   sl.registerLazySingleton<ProfileController>(
           () => ProfileController(sl<UserRepo>()));
+}
+
+Future<void> _wishlistInit() async {
+  // Registering AuthRemoteDataSrc if not already registered
+  sl.registerLazySingleton<WishlistRemoteDataSrc>(() =>
+      WishlistRemoteDataSrcImpl(sl())); //object initialize and inject dependencies
+
+  // Registering AuthRepo and its implementation
+  sl.registerLazySingleton<WishlistRepo>(
+          () => WishlistRepoImpl(sl<WishlistRemoteDataSrc>()));
+
+  // Registering CategoryController
+  sl.registerLazySingleton<WishlistController>(
+          () => WishlistController(sl<WishlistRepo>()));
 }

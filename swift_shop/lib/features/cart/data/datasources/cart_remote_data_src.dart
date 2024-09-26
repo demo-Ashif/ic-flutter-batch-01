@@ -55,15 +55,20 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
   @override
   Future<List<CartProductModel>> getCart(String userId) async {
     try {
-      final uri = Uri.parse(
-        // NetworkConstants.authority,
-        '${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}',
+      final uri = Uri.http(
+        NetworkConstants.authority,
+        '${NetworkConstants.apiUrl}${_userCartEndpoint(userId)}',
       );
 
-      final response = await _client.get(
-        uri,
-        headers: sl<CacheHelper>().getAccessToken()?.toHeaders,
-      );
+      final response = await _client
+          .get(
+            uri,
+            headers: sl<CacheHelper>().getAccessToken()?.toHeaders,
+          )
+          .timeout(
+            const Duration(seconds: 60),
+          );
+
       final payload = jsonDecode(response.body);
       await NetworkUtils.renewToken(response);
       if (response.statusCode != 200) {
@@ -180,6 +185,10 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
         }),
       );
       await NetworkUtils.renewToken(response);
+
+      // final payload = jsonDecode(response.body) as DataMap;
+      debugPrint('Ashif payload: ${response.body.toString()}');
+
       if (response.statusCode != 200 && response.statusCode != 201) {
         final payload = jsonDecode(response.body) as DataMap;
         final errorResponse = ErrorResponse.fromMap(payload);
@@ -242,7 +251,8 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
         '${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}/$cartProductId',
       );
 
-      debugPrint('${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}/$cartProductId');
+      debugPrint(
+          '${NetworkConstants.baseUrl}${_userCartEndpoint(userId)}/$cartProductId');
 
       final response = await _client.put(
         uri,
@@ -285,17 +295,18 @@ class CartRemoteDataSrcImpl implements CartRemoteDataSrc {
         body: jsonEncode({
           'cartItems': cartItems.map((cartProduct) {
             return {
-            "name": cartProduct.productName,
-            "images": [cartProduct.productImage],
-            "price": cartProduct.productPrice,
-            "productId": cartProduct.productId,
-            "cartProductId": cartProduct.id,
-            "quantity": cartProduct.quantity,
-            if (cartProduct case CartProductModel(:final selectedSize))
-            "selectedSize": selectedSize,
-            if (cartProduct case CartProductModel(:final Color selectedColour))
-            "selectedColour": selectedColour.hex
-          };
+              "name": cartProduct.productName,
+              "images": [cartProduct.productImage],
+              "price": cartProduct.productPrice,
+              "productId": cartProduct.productId,
+              "cartProductId": cartProduct.id,
+              "quantity": cartProduct.quantity,
+              if (cartProduct case CartProductModel(:final selectedSize))
+                "selectedSize": selectedSize,
+              if (cartProduct
+                  case CartProductModel(:final Color selectedColour))
+                "selectedColour": selectedColour.hex
+            };
           }).toList(),
         }),
       );

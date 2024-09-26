@@ -12,6 +12,7 @@ class ProductCategoryModel {
   });
 
   const ProductCategoryModel.empty() : this(id: '001', name: 'Cat 1');
+  const ProductCategoryModel.all() : this(id: '', name: 'All');
 
   ProductCategoryModel.fromJson(Map<String, dynamic> json)
       : this(
